@@ -13,6 +13,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import * as firebase from 'firebase';
 import { DaysComponent } from './practice-plan/days/days.component';
+import { WeeksComponent } from './practice-plan/weeks/weeks.component';
 
   // Your web app's Firebase configuration
   var firebaseConfig = {
@@ -32,10 +33,12 @@ import { DaysComponent } from './practice-plan/days/days.component';
   declarations: [
     AppComponent,
     DaysComponent,
+    WeeksComponent,
     ViewDrillComponent,
   ],
   entryComponents: [
     ViewDrillComponent,
+    WeeksComponent,
     DaysComponent,
   ],
   imports: [

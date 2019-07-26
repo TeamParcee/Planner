@@ -13,8 +13,8 @@
 
 <ion-content>
   <ion-item text-center>
-    <ion-label (click)="viewDays($event)" >Day 01</ion-label>
-    <ion-label (click)="viewWeeks()">Week 01</ion-label>
+    <ion-label (click)="viewDays($event)" >Day {{currentDay.day}}</ion-label>
+    <ion-label (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-label>
   </ion-item>
 
 

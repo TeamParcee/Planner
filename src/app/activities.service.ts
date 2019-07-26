@@ -15,6 +15,9 @@ export class ActivitiesService {
   ) { }
 
 
+  public activeWeek = {week: 1};
+  public activeDay = {day: 1};
+
   async createActivity(activity: Activity) {
 
     return await this.firebaseService.addDocument("activities", activity);
@@ -36,8 +39,13 @@ export class ActivitiesService {
         return resolve(snapshot.data())
       })
     })
-
   }
 
+  getActiveWek(){
+   return this.activeWeek
+  }
 
+  getActiveDay(){
+    return this.activeDay
+  }
 }

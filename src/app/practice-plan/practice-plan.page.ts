@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivitiesService } from '../activities.service';
 import { Activity } from '../activity';
 import { ComponentService } from '../component.service';
-import { from, Observable } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import * as firebase from 'firebase';
 import { PopoverController } from '@ionic/angular';
 import { DaysComponent } from './days/days.component';
+import { WeeksComponent } from './weeks/weeks.component';
 
 @Component({
   selector: 'app-practice-plan',
@@ -24,30 +25,45 @@ export class PracticePlanPage implements OnInit {
     this.getActivities();
   }
 
-  currentWeek = "";
-  currentDay = 0;
+
+
+  currentWeek = this.activityService.activeWeek;
+  currentDay = this.activityService.activeDay;
   activities;
   item;
   editId;
   editname;
   oldValue;
+  weekid;
+  orderArray:any[];
+
   ionViewWillEnter() {
     this.editId = null;
+    this.currentWeek = this.activityService.activeWeek;
+    this.currentDay = this.activityService.activeDay;
   }
   newActivity() {
-    let activity = new Activity(this.helper.generateid(), "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay, this.currentWeek);
+    let activity = new Activity(this.helper.generateid(), 0, "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
     this.activityService.createActivity(activity);
   }
 
   async getActivities() {
-
-    firebase.firestore().collection("activities").onSnapshot((snapshot)=>{
-      let activities = [];
-      snapshot.forEach((activity)=>{
-        activities.push(activity.data())
+    let count = 0;
+    this.orderArray = [];
+    firebase.firestore().collection("activities")
+      .where("day", "==", this.currentDay.day)
+      .where("day", "==", this.currentWeek.week)
+      .orderBy("order")
+      .onSnapshot((snapshot) => {
+        let activities = [];
+        snapshot.forEach((activity) => {
+          count = count + 1;
+          this.orderArray.push({order: count, id: activity.id});
+          activities.push(activity.data())
+        })
+        this.activities = activities;
+        console.log(this.orderArray)
       })
-      this.activities = activities
-    })
   }
 
 
@@ -57,7 +73,7 @@ export class PracticePlanPage implements OnInit {
     this.editname = null;
     this.editId = null
   }
-  cancelItem(activity){
+  cancelItem(activity) {
     this.getActivities();
     this.editname = null;
     this.editId = null;
@@ -68,16 +84,54 @@ export class PracticePlanPage implements OnInit {
 
   }
 
-  reorderItems(ev) {
-   ev.detail.complete()
+
+
+  async viewDays(ev: any) {
+    const popover = await this.popOverController.create({
+      component: DaysComponent,
+      componentProps: { weekid: this.currentWeek.week },
+      event: ev,
+      translucent: true
+    });
+    await popover.present();
+    await popover.onDidDismiss().then(() => {
+      this.currentDay = this.activityService.activeDay;
+      this.getActivities();
+    })
+  }
+  async viewWeeks(ev: any) {
+    const popover = await this.popOverController.create({
+      component: WeeksComponent,
+      event: ev,
+      translucent: true
+    });
+    await popover.present();
+    await popover.onDidDismiss().then(() => {
+      this.currentWeek = this.activityService.activeWeek;
+      this.getActivities();
+    })
+  }
+
+updateOrder(){
+  
+  this.orderArray.forEach((item)=>{
+    firebase.firestore().doc("/activities/" + item.id).update({order: item.order})
+  })
 }
 
-async viewDays(ev: any) {
-  const popover = await this.popOverController.create({
-    component: DaysComponent,
-    event: ev,
-    translucent: true
-  });
-  return await popover.present();
+reorderItems(ev) {
+  let from = ev.detail.from;
+  let to = ev.detail.to;
+  let draggedItem = this.orderArray.splice(from, 1)[0];
+  this.orderArray.splice(to, 0, draggedItem);
+  let count = 0;
+  this.orderArray.forEach((item)=>{
+    count = count + 1;
+    item.order = count;
+  })
+  ev.detail.complete();
+  
+  this.updateOrder();
+  
 }
 }

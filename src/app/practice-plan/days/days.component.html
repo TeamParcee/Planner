@@ -1,9 +1,13 @@
-<ion-list-header>Days</ion-list-header>
-<ion-list>
-  <ion-item>
-    <ion-label (click)="newDay()">Add New Day</ion-label>
-  </ion-item>
-  <ion-item *ngFor="let day of days">
-    <ion-label> {{ day.count }}</ion-label>
-  </ion-item>
-</ion-list>
+<ion-content>
+
+  <ion-list>
+    <ion-list-header>Days</ion-list-header>
+    <ion-item>
+        <ion-button fill="clear" (click)="newDay()" slot="start">Add</ion-button>
+        <ion-button fill="clear" (click)="deleteDay()" slot="end">Delete</ion-button>
+      </ion-item>
+    <ion-item *ngFor="let day of days">
+      <ion-label> {{ day.day }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
