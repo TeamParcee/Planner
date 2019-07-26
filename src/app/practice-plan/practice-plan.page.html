@@ -8,10 +8,15 @@
 
   <ion-list>
     <ion-item *ngFor="let activity of activities">
-      <ion-label  (click)="editItem('edit-' + activity.id)"  *ngIf="('edit-' + activity.id) != item">
-        <p> {{ activity.name }}</p>
-      </ion-label>
-      <ion-input  (mouseleave)="saveItem(activity, 'edit-' + activity.id)"  *ngIf="('edit-' + activity.id) == item" type="text" [(ngModel)]="activity.name"></ion-input>
+      <ion-input [ngClass]="{'nonEdit' : editId != activity.id}" 
+        (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name"></ion-input>
+      <ion-buttons slot="end">
+        <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear" [routerLink]="['/edit-activity', activity.id]"> Edit </ion-button>
+        <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear" [routerLink]="['/view-activity', activity.id]"> View </ion-button>
+        <ion-button *ngIf="activity.name != editname && editId == activity.id" fill="clear" (click)="saveItem(activity)"> Save </ion-button>
+        <ion-button *ngIf="activity.name != editname && editId == activity.id || activity.name == editname && editId == activity.id" fill="clear" (click)="cancelItem(activity)"> Cancel </ion-button>
+      </ion-buttons>
+
     </ion-item>
     <ion-item (click)="newActivity()">
       <ion-label>

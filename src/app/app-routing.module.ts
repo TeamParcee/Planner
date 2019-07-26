@@ -4,6 +4,9 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { path: '', redirectTo: 'tabs', pathMatch: 'full' },
   { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
+  { path: 'view-activity', loadChildren: './view-activity/view-activity.module#ViewActivityPageModule' },
+  { path: 'edit-drill', loadChildren: './edit-drill/edit-drill.module#EditDrillPageModule' },
+  { path: 'edit-activity', loadChildren: './edit-activity/edit-activity.module#EditActivityPageModule' },
 ];
 
 @NgModule({

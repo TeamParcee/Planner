@@ -4,7 +4,8 @@ export class Activity {
         public id: string,
         public name:string,
         public duration: string,
-        public contract: string,
+        public contact: string,
+        public notes: string,
         public day: number,
         public week: string,
     ){}

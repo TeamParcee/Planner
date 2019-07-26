@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Activity } from './activity';
+import { FirebaseService } from './firebase.service';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -9,44 +11,33 @@ export class ActivitiesService {
 
   constructor(
     private ls: Storage,
+    private firebaseService: FirebaseService,
   ) { }
 
 
   async createActivity(activity: Activity) {
-    let activities: any[] = await this.ls.get("activities");
-    if (!activities) {
-      this.ls.set("activities", [""]);
-    }
-    activities.push(activity);
-    this.ls.set("activities", activities)
+
+    return await this.firebaseService.addDocument("activities", activity);
+  
   }
 
   async updateActivity(activity: Activity) {
-    let activities: any[] = await this.ls.get("activities");
-    if (!activities) {
-      this.ls.set("activities", [""]);
-    }
-    let index = activities.findIndex(a => a.id == activity.id);
-    activities.splice(index, 1, activity);
-    this.ls.set("activities", activities);
+    return await this.firebaseService.updateDocument("activities/" + activity.id, activity)
   }
 
   async deleteActivity(activity: Activity) {
-    let activities: any[] = await this.ls.get("activities");
-    if (!activities) {
-      this.ls.set("activities", [""]);
-    }
-    let index = activities.findIndex(a => a.id == - activity.id);
-    activities.splice(index, 1);
-    this.ls.set("activities", activities);
+    return await this.firebaseService.deleteDocument("activities/" + activity.id)
   }
 
-  async getActivities() {
-    let activities: any[] = await this.ls.get("activities");
-    if (!activities) {
-      this.ls.set("activities", [""]);
-    }
+  
+  async getActivity(id) {
+    return new Promise((resolve) => {
+      return firebase.firestore().doc("activities/" + id).get().then((snapshot) => {
+        return resolve(snapshot.data())
+      })
+    })
 
-    return activities;
   }
+
+
 }

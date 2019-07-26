@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivitiesService } from '../activities.service';
 import { Activity } from '../activity';
 import { ComponentService } from '../component.service';
+import { from, Observable } from 'rxjs';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-practice-plan',
@@ -19,30 +21,46 @@ export class PracticePlanPage implements OnInit {
     this.getActivities();
   }
 
-  currentWeek;
-  currentDay;
+  currentWeek = "";
+  currentDay = 0;
   activities;
   item;
-
-  newActivity(){
-    console.log("new Activity");
-    let activity = new Activity(this.helper.generateid(), "", "", "", this.currentDay, this.currentWeek);
+  editId;
+  editname;
+  oldValue;
+  ionViewWillEnter() {
+    this.editId = null;
+  }
+  newActivity() {
+    let activity = new Activity(this.helper.generateid(), "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay, this.currentWeek);
     this.activityService.createActivity(activity);
   }
 
-  async getActivities(){
-    this.activities = await this.activityService.getActivities();
-    console.log(this.activities);
+  async getActivities() {
+
+    firebase.firestore().collection("activities").onSnapshot((snapshot)=>{
+      let activities = [];
+      snapshot.forEach((activity)=>{
+        activities.push(activity.data())
+      })
+      this.activities = activities
+    })
   }
 
-  saveItem(activity, item){
-    console.log("saving item", activity, item);
+
+  saveItem(activity) {
+    this.oldValue = activity;
     this.activityService.updateActivity(activity);
-    this.item = item;
+    this.editname = null;
+    this.editId = null
+  }
+  cancelItem(activity){
+    this.getActivities();
   }
 
-  editItem(item){
-    console.log(item, this.item);
-    this.item = item
+  editItem(item) {
+    this.editId = item;
+
   }
+
 }
