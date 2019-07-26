@@ -1,27 +1,52 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Practice Plan</ion-title>
+<ion-buttons slot="start">
+  <ion-button (click)="changeOrder = !changeOrder">
+    <ion-icon slot="start" name="add"></ion-icon>
+    Reorder
+  </ion-button>
+</ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
+  <ion-item text-center>
+    <ion-label (click)="viewDays($event)" >Day 01</ion-label>
+    <ion-label (click)="viewWeeks()">Week 01</ion-label>
+  </ion-item>
+
 
   <ion-list>
-    <ion-item *ngFor="let activity of activities">
-      <ion-input [ngClass]="{'nonEdit' : editId != activity.id}" 
-        (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name"></ion-input>
-      <ion-buttons slot="end">
-        <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear" [routerLink]="['/edit-activity', activity.id]"> Edit </ion-button>
-        <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear" [routerLink]="['/view-activity', activity.id]"> View </ion-button>
-        <ion-button *ngIf="activity.name != editname && editId == activity.id" fill="clear" (click)="saveItem(activity)"> Save </ion-button>
-        <ion-button *ngIf="activity.name != editname && editId == activity.id || activity.name == editname && editId == activity.id" fill="clear" (click)="cancelItem(activity)"> Cancel </ion-button>
-      </ion-buttons>
+    <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
+      <ion-item *ngFor="let activity of activities">
+        <ion-reorder *ngIf="changeOrder"></ion-reorder>
+        <ion-input [disabled]="changeOrder" [ngClass]="{'nonEdit' : editId != activity.id}"
+          (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name">
+        </ion-input>
 
-    </ion-item>
-    <ion-item (click)="newActivity()">
-      <ion-label>
-        <h2> (+) New Activitiy</h2>
-      </ion-label>
-    </ion-item>
+        <ion-buttons slot="end">
+          <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear"
+            [routerLink]="['/edit-activity', activity.id]"> Edit </ion-button>
+          <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear"
+            [routerLink]="['/view-activity', activity.id]"> View </ion-button>
+          <ion-button *ngIf="activity.name != editname && editId == activity.id" fill="clear"
+            (click)="saveItem(activity)"> Save </ion-button>
+          <ion-button
+            *ngIf="activity.name != editname && editId == activity.id || activity.name == editname && editId == activity.id"
+            fill="clear" (click)="cancelItem(activity)"> Cancel </ion-button>
+
+        </ion-buttons>
+      </ion-item>
+    </ion-reorder-group>
   </ion-list>
+
+
+  <ion-item (click)="newActivity()">
+    <ion-label>
+      <h2> (+) New Activitiy</h2>
+    </ion-label>
+  </ion-item>
+
 </ion-content>

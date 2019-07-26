@@ -12,6 +12,7 @@ import { ViewDrillComponent } from './view-drill/view-drill.component';
 import { IonicStorageModule } from '@ionic/storage';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import * as firebase from 'firebase';
+import { DaysComponent } from './practice-plan/days/days.component';
 
   // Your web app's Firebase configuration
   var firebaseConfig = {
@@ -30,10 +31,12 @@ import * as firebase from 'firebase';
 @NgModule({
   declarations: [
     AppComponent,
+    DaysComponent,
     ViewDrillComponent,
   ],
   entryComponents: [
     ViewDrillComponent,
+    DaysComponent,
   ],
   imports: [
     BrowserModule,

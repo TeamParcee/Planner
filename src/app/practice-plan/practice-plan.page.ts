@@ -4,6 +4,8 @@ import { Activity } from '../activity';
 import { ComponentService } from '../component.service';
 import { from, Observable } from 'rxjs';
 import * as firebase from 'firebase';
+import { PopoverController } from '@ionic/angular';
+import { DaysComponent } from './days/days.component';
 
 @Component({
   selector: 'app-practice-plan',
@@ -15,6 +17,7 @@ export class PracticePlanPage implements OnInit {
   constructor(
     private activityService: ActivitiesService,
     private helper: ComponentService,
+    private popOverController: PopoverController,
   ) { }
 
   ngOnInit() {
@@ -56,6 +59,8 @@ export class PracticePlanPage implements OnInit {
   }
   cancelItem(activity){
     this.getActivities();
+    this.editname = null;
+    this.editId = null;
   }
 
   editItem(item) {
@@ -63,4 +68,16 @@ export class PracticePlanPage implements OnInit {
 
   }
 
+  reorderItems(ev) {
+   ev.detail.complete()
+}
+
+async viewDays(ev: any) {
+  const popover = await this.popOverController.create({
+    component: DaysComponent,
+    event: ev,
+    translucent: true
+  });
+  return await popover.present();
+}
 }

@@ -1,0 +1,9 @@
+<ion-list-header>Days</ion-list-header>
+<ion-list>
+  <ion-item>
+    <ion-label (click)="newDay()">Add New Day</ion-label>
+  </ion-item>
+  <ion-item *ngFor="let day of days">
+    <ion-label> {{ day.count }}</ion-label>
+  </ion-item>
+</ion-list>
