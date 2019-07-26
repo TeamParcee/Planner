@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Drill Library</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar autocomplete="on" placeholder="Filter By Position" (ionChange)="search($event)"></ion-searchbar>
+  <ion-list>
+    <ion-item detail ion-button (click)="viewDrill(drill)" *ngFor="let drill of searchFilter">
+      <ion-label>
+        <h2> {{ drill.Drill }}</h2>
+        <p> {{ drill.Position }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

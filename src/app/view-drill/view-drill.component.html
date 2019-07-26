@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="start" name="close"></ion-icon>
+        close
+      </ion-button>
+    </ion-buttons>
+    <ion-title> {{ drill.Position }} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle> {{ drill.Position }}</ion-card-subtitle>
+      <ion-card-title> {{ drill.Drill }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <video style="width: 100%" class="video-js" controls autoplay preload="auto">
+        <source [src]="drill.Video" type="video/mp4">
+      </video>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
