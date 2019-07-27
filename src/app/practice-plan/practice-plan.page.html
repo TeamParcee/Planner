@@ -1,19 +1,25 @@
 <ion-header>
   <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button (click)="changeOrder = !changeOrder">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Reorder
+          </ion-button>
+        </ion-buttons>
     <ion-title>Practice Plan</ion-title>
-<ion-buttons slot="start">
-  <ion-button (click)="changeOrder = !changeOrder">
-    <ion-icon slot="start" name="add"></ion-icon>
-    Reorder
-  </ion-button>
-</ion-buttons>
+    <ion-buttons slot="end">
+        <ion-button (click)="startPlan()">
+          <ion-icon slot="start" name="timer"></ion-icon>
+          Start
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content>
   <ion-item text-center>
-    <ion-label (click)="viewDays($event)" >Day {{currentDay.day}}</ion-label>
+    <ion-label (click)="viewDays($event)">Day {{currentDay.day}}</ion-label>
     <ion-label (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-label>
   </ion-item>
 
@@ -22,6 +28,7 @@
     <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
       <ion-item *ngFor="let activity of activities">
         <ion-reorder *ngIf="changeOrder"></ion-reorder>
+        <ion-note slot="start"> {{ (activity.duration == "New Duration" ) ? 0 : activity.duration }}</ion-note>
         <ion-input [disabled]="changeOrder" [ngClass]="{'nonEdit' : editId != activity.id}"
           (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name">
         </ion-input>

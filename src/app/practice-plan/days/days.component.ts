@@ -4,6 +4,7 @@ import { WeekDay } from '@angular/common';
 import { FirebaseService } from 'src/app/firebase.service';
 import { ComponentService } from 'src/app/component.service';
 import { ActivitiesService } from 'src/app/activities.service';
+import { PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-days',
@@ -14,7 +15,8 @@ export class DaysComponent implements OnInit {
 
   constructor(
     private helper: ComponentService,
-    private activeService: ActivitiesService,
+    private activityService: ActivitiesService,
+    private popoverCtrl: PopoverController,
 
     private firebaseService: FirebaseService,
   ) { }
@@ -57,7 +59,7 @@ export class DaysComponent implements OnInit {
   }
 
   activeDay(day){
-    this.activityService.activeWeek = week;
+    this.activityService.activeDay = day;
     this.popoverCtrl.dismiss();
     }
 }

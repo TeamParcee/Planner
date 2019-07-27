@@ -7,6 +7,8 @@ const routes: Routes = [
   { path: 'view-activity', loadChildren: './view-activity/view-activity.module#ViewActivityPageModule' },
   { path: 'edit-drill', loadChildren: './edit-drill/edit-drill.module#EditDrillPageModule' },
   { path: 'edit-activity', loadChildren: './edit-activity/edit-activity.module#EditActivityPageModule' },
+  { path: 'event-group', loadChildren: './event-group/event-group.module#EventGroupPageModule' },
+  { path: 'event-groups', loadChildren: './event-groups/event-groups.module#EventGroupsPageModule' },
 ];
 
 @NgModule({

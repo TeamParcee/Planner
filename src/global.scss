@@ -11,7 +11,10 @@
 @import '~@ionic/angular/css/flex-utils.css';
 
 
+ion-card, .alert-wrapper, ion-list, ion-item{
+    background: white !important;
+}
 
-ion-button:hover{
-    cursor: pointer;
+*{
+    font-weight: bold;
 }

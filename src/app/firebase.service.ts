@@ -16,9 +16,9 @@ export class FirebaseService {
 
     return new Promise((resolve) => {
       let id = firebase.firestore().collection(col).doc().id;
-      let o = {...obj}
+      let o = { ...obj }
       o.id = id;
-      firebase.firestore().doc(col + "/" + id).set(o).then(()=>{
+      firebase.firestore().doc(col + "/" + id).set(o).then(() => {
         resolve()
       })
     })
@@ -27,7 +27,7 @@ export class FirebaseService {
   setDocument(doc, obj) {
 
     return new Promise((resolve) => {
-      firebase.firestore().doc(doc).set(obj).then(()=>{
+      firebase.firestore().doc(doc).set(obj).then(() => {
         resolve()
       })
     })
@@ -36,7 +36,7 @@ export class FirebaseService {
   updateDocument(doc, obj) {
 
     return new Promise((resolve) => {
-      firebase.firestore().doc(doc).update(obj).then(()=>{
+      firebase.firestore().doc(doc).update(obj).then(() => {
         resolve()
       })
     })
@@ -45,8 +45,16 @@ export class FirebaseService {
 
   deleteDocument(doc) {
     return new Promise((resolve) => {
-      firebase.firestore().doc(doc).delete().then(()=>{
+      firebase.firestore().doc(doc).delete().then(() => {
         resolve()
+      })
+    })
+  }
+
+  getDocument(doc) {
+    return new Promise((resolve) => {
+      return firebase.firestore().doc(doc).get().then((snapshot) => {
+        return resolve(snapshot.data())
       })
     })
   }

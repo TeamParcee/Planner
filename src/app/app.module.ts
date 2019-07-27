@@ -14,19 +14,22 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import * as firebase from 'firebase';
 import { DaysComponent } from './practice-plan/days/days.component';
 import { WeeksComponent } from './practice-plan/weeks/weeks.component';
+import { CreateEventGroupComponent } from './event-groups/create-event-group/create-event-group.component';
+import { AddEventComponent } from './event-group/add-event/add-event.component';
+import { EditEventComponent } from './event-group/edit-event/edit-event.component';
 
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyAE3AST_EidRw038ej957xstPJFCoGBNbA",
-    authDomain: "gerronfootballapp.firebaseapp.com",
-    databaseURL: "https://gerronfootballapp.firebaseio.com",
-    projectId: "gerronfootballapp",
-    storageBucket: "gerronfootballapp.appspot.com",
-    messagingSenderId: "248294524088",
-    appId: "1:248294524088:web:f00288f7392b08fc"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyAE3AST_EidRw038ej957xstPJFCoGBNbA",
+  authDomain: "gerronfootballapp.firebaseapp.com",
+  databaseURL: "https://gerronfootballapp.firebaseio.com",
+  projectId: "gerronfootballapp",
+  storageBucket: "gerronfootballapp.appspot.com",
+  messagingSenderId: "248294524088",
+  appId: "1:248294524088:web:f00288f7392b08fc"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 
 @NgModule({
@@ -35,11 +38,17 @@ import { WeeksComponent } from './practice-plan/weeks/weeks.component';
     DaysComponent,
     WeeksComponent,
     ViewDrillComponent,
+    CreateEventGroupComponent, 
+    AddEventComponent, 
+    EditEventComponent
   ],
   entryComponents: [
     ViewDrillComponent,
     WeeksComponent,
-    DaysComponent,
+    DaysComponent,  
+    CreateEventGroupComponent, 
+    AddEventComponent, 
+    EditEventComponent
   ],
   imports: [
     BrowserModule,

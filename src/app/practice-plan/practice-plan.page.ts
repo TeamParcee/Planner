@@ -4,9 +4,11 @@ import { Activity } from '../activity';
 import { ComponentService } from '../component.service';
 import { from, Observable, Subject } from 'rxjs';
 import * as firebase from 'firebase';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, NavController } from '@ionic/angular';
 import { DaysComponent } from './days/days.component';
 import { WeeksComponent } from './weeks/weeks.component';
+import { EventsService } from '../events.service';
+import { EventGroup } from '../event-group';
 
 @Component({
   selector: 'app-practice-plan',
@@ -19,6 +21,8 @@ export class PracticePlanPage implements OnInit {
     private activityService: ActivitiesService,
     private helper: ComponentService,
     private popOverController: PopoverController,
+    private eventService: EventsService,
+    private navCtrl: NavController,
   ) { }
 
   ngOnInit() {
@@ -29,7 +33,7 @@ export class PracticePlanPage implements OnInit {
 
   currentWeek = this.activityService.activeWeek;
   currentDay = this.activityService.activeDay;
-  activities;
+  activities:any[];
   item;
   editId;
   editname;
@@ -49,12 +53,13 @@ export class PracticePlanPage implements OnInit {
 
   async getActivities() {
     let count = 0;
-    this.orderArray = [];
+   
     firebase.firestore().collection("activities")
       .where("day", "==", this.currentDay.day)
       .where("day", "==", this.currentWeek.week)
       .orderBy("order")
       .onSnapshot((snapshot) => {
+        this.orderArray = [];
         let activities = [];
         snapshot.forEach((activity) => {
           count = count + 1;
@@ -62,7 +67,6 @@ export class PracticePlanPage implements OnInit {
           activities.push(activity.data())
         })
         this.activities = activities;
-        console.log(this.orderArray)
       })
   }
 
@@ -133,5 +137,11 @@ reorderItems(ev) {
   
   this.updateOrder();
   
+}
+
+startPlan(){
+  let eventGroup: any = [...this.activities];
+  this.eventService.startEvent(eventGroup);
+  this.navCtrl.navigateBack("/tabs/home")
 }
 }

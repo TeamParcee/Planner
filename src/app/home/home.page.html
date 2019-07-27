@@ -1,9 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Home</ion-title>
+    <ion-title>
+      Timer
+    </ion-title>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid style="height: 60%" padding-none>
+    <ion-row justify-content-center align-items-center style="height: 100%">
+      <ion-col padding-none size-sm="4" offset-sm="4">
+        <ion-card style="vertical-align: middle" margin-none>
+          <ion-card-content>
+            <ion-label text-center>
+              <h2>{{ activeEventGroup?.name }} </h2>
+              <h2>{{ currentEvent?.name }}</h2>
+            </ion-label>
+          </ion-card-content >
+          <ion-card-header text-center>
+            <ion-card-title>{{ time }}</ion-card-title>
+          </ion-card-header>
 
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
