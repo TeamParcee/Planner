@@ -9,6 +9,7 @@ import { TimerService } from './timer.service';
 import { FirebaseService } from './firebase.service';
 import * as firebase from 'firebase';
 
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class EventsService {
     private ls: Storage,
     private timerService: TimerService,
     private firebaseService: FirebaseService,
+    private vibration: Vibration,
   ) { }
 
 
@@ -86,6 +88,7 @@ export class EventsService {
 
 
   async startEvent(eventGroup) {
+    this.vibration.vibrate(4000);
     this.activeEventGroup = eventGroup;
    let events:any[] = eventGroup;
     

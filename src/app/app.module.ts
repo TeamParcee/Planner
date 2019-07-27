@@ -17,6 +17,9 @@ import { WeeksComponent } from './practice-plan/weeks/weeks.component';
 import { CreateEventGroupComponent } from './event-groups/create-event-group/create-event-group.component';
 import { AddEventComponent } from './event-group/add-event/add-event.component';
 import { EditEventComponent } from './event-group/edit-event/edit-event.component';
+import { ViewTemplatesComponent } from './practice-plan/view-templates/view-templates.component';
+import { Vibration } from '@ionic-native/vibration/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -38,17 +41,20 @@ firebase.initializeApp(firebaseConfig);
     DaysComponent,
     WeeksComponent,
     ViewDrillComponent,
-    CreateEventGroupComponent, 
-    AddEventComponent, 
-    EditEventComponent
+    CreateEventGroupComponent,
+    AddEventComponent,
+    EditEventComponent,
+    ViewTemplatesComponent,
+
   ],
   entryComponents: [
     ViewDrillComponent,
     WeeksComponent,
-    DaysComponent,  
-    CreateEventGroupComponent, 
-    AddEventComponent, 
-    EditEventComponent
+    DaysComponent,
+    CreateEventGroupComponent,
+    AddEventComponent,
+    EditEventComponent,
+    ViewTemplatesComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +66,8 @@ firebase.initializeApp(firebaseConfig);
   providers: [
     StatusBar,
     SplashScreen,
+    Vibration,
+    BackgroundMode,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

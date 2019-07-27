@@ -18,7 +18,7 @@ export class FirebaseService {
       let id = firebase.firestore().collection(col).doc().id;
       let o = { ...obj }
       o.id = id;
-      firebase.firestore().doc(col + "/" + id).set(o).then(() => {
+      return firebase.firestore().doc(col + "/" + id).set(o).then(() => {
         resolve()
       })
     })

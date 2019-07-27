@@ -9,6 +9,8 @@ import { DaysComponent } from './days/days.component';
 import { WeeksComponent } from './weeks/weeks.component';
 import { EventsService } from '../events.service';
 import { EventGroup } from '../event-group';
+import { TemplatesPage } from '../templates/templates.page';
+import { ViewTemplatesComponent } from './view-templates/view-templates.component';
 
 @Component({
   selector: 'app-practice-plan',
@@ -33,13 +35,13 @@ export class PracticePlanPage implements OnInit {
 
   currentWeek = this.activityService.activeWeek;
   currentDay = this.activityService.activeDay;
-  activities:any[];
+  activities: any[];
   item;
   editId;
   editname;
   oldValue;
   weekid;
-  orderArray:any[];
+  orderArray: any[];
 
   ionViewWillEnter() {
     this.editId = null;
@@ -47,23 +49,23 @@ export class PracticePlanPage implements OnInit {
     this.currentDay = this.activityService.activeDay;
   }
   newActivity() {
-    let activity = new Activity(this.helper.generateid(), 0, "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
+    let activity = new Activity(this.helper.generateid(), 100, "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
     this.activityService.createActivity(activity);
   }
 
   async getActivities() {
     let count = 0;
-   
+    console.log(this.activities, this.currentDay.day, this.currentWeek.week);
     firebase.firestore().collection("activities")
       .where("day", "==", this.currentDay.day)
-      .where("day", "==", this.currentWeek.week)
+      .where("week", "==", this.currentWeek.week)
       .orderBy("order")
       .onSnapshot((snapshot) => {
         this.orderArray = [];
         let activities = [];
         snapshot.forEach((activity) => {
           count = count + 1;
-          this.orderArray.push({order: count, id: activity.id});
+          this.orderArray.push({ order: count, id: activity.id });
           activities.push(activity.data())
         })
         this.activities = activities;
@@ -99,7 +101,7 @@ export class PracticePlanPage implements OnInit {
     });
     await popover.present();
     await popover.onDidDismiss().then(() => {
-      this.currentDay = this.activityService.activeDay;
+      this.currentDay = this.activityService.activeDay
       this.getActivities();
     })
   }
@@ -116,32 +118,55 @@ export class PracticePlanPage implements OnInit {
     })
   }
 
-updateOrder(){
-  
-  this.orderArray.forEach((item)=>{
-    firebase.firestore().doc("/activities/" + item.id).update({order: item.order})
-  })
-}
 
-reorderItems(ev) {
-  let from = ev.detail.from;
-  let to = ev.detail.to;
-  let draggedItem = this.orderArray.splice(from, 1)[0];
-  this.orderArray.splice(to, 0, draggedItem);
-  let count = 0;
-  this.orderArray.forEach((item)=>{
-    count = count + 1;
-    item.order = count;
-  })
-  ev.detail.complete();
-  
-  this.updateOrder();
-  
-}
+  async viewTemplates(ev: any) {
+    const popover = await this.popOverController.create({
+      component: ViewTemplatesComponent,
+      componentProps: {activities: this.activities, day: this.currentDay.day, week: this.currentWeek.week},
+      event: ev,
+      translucent: true
+    });
+    await popover.present();
+    await popover.onDidDismiss().then(() => {
+      this.getActivities();
+    })
+  }
 
-startPlan(){
-  let eventGroup: any = [...this.activities];
-  this.eventService.startEvent(eventGroup);
-  this.navCtrl.navigateBack("/tabs/home")
-}
+  updateOrder() {
+
+    this.orderArray.forEach((item) => {
+      firebase.firestore().doc("/activities/" + item.id).update({ order: item.order })
+    })
+  }
+
+  reorderItems(ev) {
+    let from = ev.detail.from;
+    let to = ev.detail.to;
+    let draggedItem = this.orderArray.splice(from, 1)[0];
+    this.orderArray.splice(to, 0, draggedItem);
+    let count = 0;
+    this.orderArray.forEach((item) => {
+      count = count + 1;
+      item.order = count;
+    })
+    ev.detail.complete();
+
+    this.updateOrder();
+
+  }
+
+  startPlan() {
+    let eventGroup: any = [...this.activities];
+    this.eventService.startEvent(eventGroup);
+    this.navCtrl.navigateBack("/tabs/home")
+  }
+
+
+  favorite() {
+    console.log("f")
+  }
+
+  unFavorite(){
+    console.log("u")
+  }
 }

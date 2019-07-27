@@ -1,18 +1,20 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-button (click)="changeOrder = !changeOrder">
-            <ion-icon slot="start" name="add"></ion-icon>
-            Reorder
-          </ion-button>
-        </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button (click)="unFavorite()">
+        <ion-icon  *ngIf="!favorite" slot="start" name="star-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="viewTemplates($event)">
+        <ion-icon *ngIf="favorite" slot="start" name="star"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Practice Plan</ion-title>
     <ion-buttons slot="end">
-        <ion-button (click)="startPlan()">
-          <ion-icon slot="start" name="timer"></ion-icon>
-          Start
-        </ion-button>
-      </ion-buttons>
+      <ion-button (click)="startPlan()">
+        <ion-icon slot="start" name="timer"></ion-icon>
+        Start
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -25,6 +27,10 @@
 
 
   <ion-list>
+    <ion-item text-center>
+      <ion-label (click)="newActivity()"> New Activitiy </ion-label>
+      <ion-label (click)="changeOrder = !changeOrder"> Reorder</ion-label>
+    </ion-item>
     <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
       <ion-item *ngFor="let activity of activities">
         <ion-reorder *ngIf="changeOrder"></ion-reorder>
@@ -50,10 +56,6 @@
   </ion-list>
 
 
-  <ion-item (click)="newActivity()">
-    <ion-label>
-      <h2> (+) New Activitiy</h2>
-    </ion-label>
-  </ion-item>
+
 
 </ion-content>

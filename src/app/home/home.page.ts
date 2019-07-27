@@ -3,6 +3,7 @@ import { EventsService } from '../events.service';
 import { EventGroup } from '../event-group';
 import { TimerService } from '../timer.service';
 import { from } from 'rxjs';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 
 @Component({
@@ -13,11 +14,13 @@ import { from } from 'rxjs';
 export class HomePage implements OnInit {
 
   constructor(
+    private backgroundMode: BackgroundMode,
     private eventService: EventsService,
     private timeService: TimerService,
   ) { }
 
   ngOnInit() {
+    this.backgroundMode.enable();
   }
 
   ionViewWillEnter() {
