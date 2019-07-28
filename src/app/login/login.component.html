@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button click="close()">
+      <ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -18,5 +18,5 @@
     <ion-label position="stacked">Password</ion-label>
     <ion-input type="password" [(ngModel)]="password"></ion-input>
   </ion-item>
-  <ion-button [disabled]="!email || !password" expand="block">Login</ion-button>
+  <ion-button margin-top (click)="login()" [disabled]="!email || !password" expand="block">Login</ion-button>
 </ion-content>

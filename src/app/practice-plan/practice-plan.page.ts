@@ -43,7 +43,7 @@ export class PracticePlanPage implements OnInit {
   weekid;
   orderArray: any[];
   totalTime;
-
+  changeOrder;
 
   ionViewWillEnter() {
     this.editId = null;

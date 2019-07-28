@@ -50,7 +50,7 @@ export class ViewTemplatesComponent implements OnInit {
     this.helper.showOkAlert("Plan Created", "The Practice Plan has been created from the template " + template.templateName)
   }
 
-  saveTemplate(template) {
+  saveTemplate() {
     let input: AlertInput[] = [
       {
         name: "name",
