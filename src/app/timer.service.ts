@@ -3,6 +3,7 @@ import * as Timer from 'easytimer';
 import { Observable } from 'rxjs';
 import { ComponentService } from './component.service';
 import { Event } from './event';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 
 @Injectable({
@@ -12,6 +13,7 @@ export class TimerService {
 
   constructor(
     private componentService: ComponentService,
+    private vibration: Vibration,
   ) {
 
   }
@@ -29,12 +31,12 @@ export class TimerService {
   private timerRunning;
   private previousTime;
   currentTime;
+  
 
 
 
   startCountDownTimer(event: Event) {
-    
-        console.log("starting Timer " + event.title)
+        this.vibration.vibrate(4000);    
         this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
         this.timerRunning = true;
         this.waitForTimerToEnd(event);

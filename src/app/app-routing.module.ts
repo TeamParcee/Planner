@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'edit-activity', loadChildren: './edit-activity/edit-activity.module#EditActivityPageModule' },
   { path: 'event-group', loadChildren: './event-group/event-group.module#EventGroupPageModule' },
   { path: 'event-groups', loadChildren: './event-groups/event-groups.module#EventGroupsPageModule' },  { path: 'templates', loadChildren: './templates/templates.module#TemplatesPageModule' },
+  { path: 'about', loadChildren: './about/about.module#AboutPageModule' },
 
 ];
 

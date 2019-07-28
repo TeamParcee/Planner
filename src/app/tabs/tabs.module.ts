@@ -36,6 +36,14 @@ const routes: Routes = [
             loadChildren: '../practice-plan/practice-plan.module#PracticePlanPageModule'
           }
         ]
+      },{
+        path: 'about',
+        children: [
+          {
+            path: '',
+            loadChildren: '../about/about.module#AboutPageModule'
+          }
+        ]
       },
       {
         path: '',

@@ -10,11 +10,12 @@
 <ion-content>
   <ion-grid style="height: 60%" padding-none>
     <ion-row justify-content-center align-items-center style="height: 100%">
-      <ion-col padding-none size-sm="4" offset-sm="4">
-        <ion-card style="vertical-align: middle" margin-none>
+      <ion-col style="margin: auto" padding-none size-sm="4" offset-sm="4">
+        <ion-card style="vertical-align: middle; ">
           <ion-card-content>
             <ion-label text-center>
-              <h2>{{ activeEventGroup?.name }} </h2>
+              <h2 *ngIf="!currentEvent">No Active Event Groups</h2>
+              <h2>{{ activeEventGroup?.name }}</h2>
               <h2>{{ currentEvent?.name }}</h2>
             </ion-label>
           </ion-card-content >

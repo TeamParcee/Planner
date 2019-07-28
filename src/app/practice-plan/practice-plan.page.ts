@@ -42,6 +42,8 @@ export class PracticePlanPage implements OnInit {
   oldValue;
   weekid;
   orderArray: any[];
+  totalTime;
+
 
   ionViewWillEnter() {
     this.editId = null;
@@ -49,13 +51,12 @@ export class PracticePlanPage implements OnInit {
     this.currentDay = this.activityService.activeDay;
   }
   newActivity() {
-    let activity = new Activity(this.helper.generateid(), 100, "New Activity", "New Duration", "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
+    let activity = new Activity(this.helper.generateid(), 100, "New Activity", 0, "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
     this.activityService.createActivity(activity);
   }
 
   async getActivities() {
     let count = 0;
-    console.log(this.activities, this.currentDay.day, this.currentWeek.week);
     firebase.firestore().collection("activities")
       .where("day", "==", this.currentDay.day)
       .where("week", "==", this.currentWeek.week)
@@ -69,6 +70,7 @@ export class PracticePlanPage implements OnInit {
           activities.push(activity.data())
         })
         this.activities = activities;
+        this.getTotalTime();
       })
   }
 
@@ -162,11 +164,11 @@ export class PracticePlanPage implements OnInit {
   }
 
 
-  favorite() {
-    console.log("f")
-  }
-
-  unFavorite(){
-    console.log("u")
+  getTotalTime(){
+    let time = 0;
+    this.activities.forEach((activity)=>{
+      time = activity.duration + time
+    })
+    this.totalTime = time;
   }
 }
