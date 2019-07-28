@@ -4,6 +4,8 @@ import { EventGroup } from '../event-group';
 import { TimerService } from '../timer.service';
 import { from } from 'rxjs';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { ComponentService } from '../component.service';
+import { LoginComponent } from '../login/login.component';
 
 
 @Component({
@@ -17,6 +19,7 @@ export class HomePage implements OnInit {
     private backgroundMode: BackgroundMode,
     private eventService: EventsService,
     private timeService: TimerService,
+    private helper: ComponentService,
   ) { }
 
   ngOnInit() {
@@ -42,7 +45,7 @@ export class HomePage implements OnInit {
   }
 
 
-  // getCurrentEvent(){
-  //     this.activeEventGroup.events.
-  // }
+  showLogin(){
+    this.helper.showModal(LoginComponent, null)
+  }
 }

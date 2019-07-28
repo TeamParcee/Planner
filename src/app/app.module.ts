@@ -20,6 +20,7 @@ import { EditEventComponent } from './event-group/edit-event/edit-event.componen
 import { ViewTemplatesComponent } from './practice-plan/view-templates/view-templates.component';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { LoginComponent } from './login/login.component';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -41,6 +42,7 @@ firebase.initializeApp(firebaseConfig);
     DaysComponent,
     WeeksComponent,
     ViewDrillComponent,
+    LoginComponent,
     CreateEventGroupComponent,
     AddEventComponent,
     EditEventComponent,
@@ -50,6 +52,7 @@ firebase.initializeApp(firebaseConfig);
   entryComponents: [
     ViewDrillComponent,
     WeeksComponent,
+    LoginComponent,
     DaysComponent,
     CreateEventGroupComponent,
     AddEventComponent,

@@ -30,6 +30,7 @@
     "add": "^2.0.6",
     "cordova": "^9.0.0",
     "cordova-plugin-background-mode": "^0.7.2",
+    "cordova-plugin-ionic": "^5.4.1",
     "cordova-plugin-vibration": "^3.1.1",
     "cordova-sqlite-storage": "^3.2.1",
     "core-js": "^2.5.4",
@@ -72,7 +73,15 @@
   "cordova": {
     "plugins": {
       "cordova-sqlite-storage": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "7ae6c14c",
+        "CHANNEL_NAME": "Production",
+        "UPDATE_METHOD": "auto",
+        "MAX_STORE": "2",
+        "MIN_BACKGROUND_DURATION": "30",
+        "UPDATE_API": "https://api.ionicjs.com"
+      }
     }
   }
 }

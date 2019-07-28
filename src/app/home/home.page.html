@@ -3,7 +3,11 @@
     <ion-title>
       Timer
     </ion-title>
-
+    <ion-buttons slot="end">
+      <ion-button (click)="showLogin()">
+        <ion-icon name="log-in"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +22,7 @@
               <h2>{{ activeEventGroup?.name }}</h2>
               <h2>{{ currentEvent?.name }}</h2>
             </ion-label>
-          </ion-card-content >
+          </ion-card-content>
           <ion-card-header text-center>
             <ion-card-title>{{ time }}</ion-card-title>
           </ion-card-header>
