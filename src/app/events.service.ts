@@ -28,6 +28,7 @@ export class EventsService {
   private event: EventGroup;
   activeEventGroup: EventGroup;
   activeEvent: Event;
+  activeEventLock;
   count;
   countPlus1;
   lastCount;
@@ -99,16 +100,20 @@ export class EventsService {
           events.push(event.data())
         })
 
-        this.count = events.length - 1;
-        this.lastCount = 0;
-          firebase.firestore().doc("utilities/activeEvent").onSnapshot((snapshot: any) => {
-            this.activeEvent = events[this.lastCount];
-            setTimeout(() => {
-              this.timerService.startCountDownTimer(events[this.lastCount]);
-              this.lastCount = this.lastCount + 1;
-            }, 3000);
+        let x = 0;
+        this.timerService.startCountDownTimer(events[0]);
+        this.activeEvent = events[0];
+        events.slice(1).forEach((event) => {
+          x = event.duration + x
+          setTimeout(() => {
+            this.activeEvent = event;
+            this.timerService.startCountDownTimer(event);
+          }, x * 65000);
+        })
 
-          })
+
       })
   }
+
+
 }

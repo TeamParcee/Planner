@@ -35,16 +35,24 @@ export class TimerService {
   private endTime;
   private timerRunning;
   private previousTime;
+  private seconds;
+  private miutes;
+
   currentTime;
-
-
+  activeEventLock;
+  count;
 
 
   startCountDownTimer(event: Event) {
+    console.log("starting countdown timer");
+    
+    
+      this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
+      this.isTimerRunning();
+      this.timerRunning = true;
+      this.waitForTimerToEnd(event);
    
-    this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
-    this.timerRunning = true;
-    this.waitForTimerToEnd(event);
+
 
 
 
@@ -53,29 +61,31 @@ export class TimerService {
 
 
   waitForTimerToEnd(event) {
-
-    this.timer.addEventListener('targetAchieved', this.timerEnded(event));
+   
+    this.timer.addEventListener('targetAchieved', () => {
+      this.componentService.showOkAlert("Event Ended", event.name + " has ended. ")
+    });
 
   }
 
   timerEnded(event) {
-    console.log("timer ended");
     this.timerRunning = false;
     this.componentService.showOkAlert(event.name + " starting", event.name + " has started.");
-    
+
     let shakeTime = setInterval(()=>{
       this.vibration.vibrate(1000)
     }, 1000)
-    
+
     this.shake.startWatch().subscribe(()=>{
       clearInterval(shakeTime);
     })
 
-    firebase.firestore().doc("utilities/activeEvent").update({name: "Getting Next Event..."})
   }
 
   isTimerRunning() {
-    this.timer.addEventListener('secondsUpdated', () => {
+    this.timer.addEventListener('secondsUpdated', (time) => {
+      let currentTime = time.path[0].currentTime;
+      firebase.firestore().doc("utilities/timer").set({...{time: currentTime}});
       if (this.timerRunning == true) {
         return true
       } else {
@@ -94,6 +104,6 @@ export class TimerService {
     })
   }
 
-
+  
 }
 
