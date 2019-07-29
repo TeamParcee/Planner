@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { ComponentService } from './component.service';
 import { Event } from './event';
 import { Vibration } from '@ionic-native/vibration/ngx';
-
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { Shake } from '@ionic-native/shake/ngx';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,9 @@ export class TimerService {
   constructor(
     private componentService: ComponentService,
     private vibration: Vibration,
+    private localNotifications: LocalNotifications,
+    private shake: Shake,
+
   ) {
 
   }
@@ -31,15 +36,15 @@ export class TimerService {
   private timerRunning;
   private previousTime;
   currentTime;
-  
+
 
 
 
   startCountDownTimer(event: Event) {
-        this.vibration.vibrate(4000);    
-        this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
-        this.timerRunning = true;
-        this.waitForTimerToEnd(event);
+   
+    this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
+    this.timerRunning = true;
+    this.waitForTimerToEnd(event);
 
 
 
@@ -54,8 +59,19 @@ export class TimerService {
   }
 
   timerEnded(event) {
+    console.log("timer ended");
     this.timerRunning = false;
-    this.componentService.showOkAlert(event.name + " starting", event.name + " has started.")
+    this.componentService.showOkAlert(event.name + " starting", event.name + " has started.");
+    
+    let shakeTime = setInterval(()=>{
+      this.vibration.vibrate(1000)
+    }, 1000)
+    
+    this.shake.startWatch().subscribe(()=>{
+      clearInterval(shakeTime);
+    })
+
+    firebase.firestore().doc("utilities/activeEvent").update({name: "Getting Next Event..."})
   }
 
   isTimerRunning() {

@@ -28,8 +28,9 @@ export class EventsService {
   private event: EventGroup;
   activeEventGroup: EventGroup;
   activeEvent: Event;
-
-
+  count;
+  countPlus1;
+  lastCount;
 
 
   async addEventGroup(eventGroup: EventGroup) {
@@ -88,10 +89,9 @@ export class EventsService {
 
 
   async startEvent(eventGroup) {
-    this.vibration.vibrate(4000);
     this.activeEventGroup = eventGroup;
-   let events:any[] = eventGroup;
-    
+    let events: any[] = eventGroup;
+
     firebase.firestore().collection("eventgroups/" + eventGroup.id + "/events")
       .orderBy("order")
       .get().then((snapshot) => {
@@ -99,25 +99,16 @@ export class EventsService {
           events.push(event.data())
         })
 
-        let previousIndex;
-        let previousEvent;
-        let previousDuration;
-        let timeoutTime = 0;
-        events.forEach(async (event) => {
+        this.count = events.length - 1;
+        this.lastCount = 0;
+          firebase.firestore().doc("utilities/activeEvent").onSnapshot((snapshot: any) => {
+            this.activeEvent = events[this.lastCount];
+            setTimeout(() => {
+              this.timerService.startCountDownTimer(events[this.lastCount]);
+              this.lastCount = this.lastCount + 1;
+            }, 3000);
 
-          let index = events.findIndex(e => e.id === event.id);
-          previousIndex = (index == 0) ? 0 : index - 1;
-          previousEvent = events[previousIndex];
-          previousDuration = (index == 0) ? 0 : events[previousIndex].duration;
-
-          timeoutTime = timeoutTime + previousDuration;
-
-          setTimeout(() => {
-            this.activeEvent = event;
-            this.timerService.startCountDownTimer(event);
-          }, timeoutTime * 62000)
-
-        })
+          })
       })
   }
 }
