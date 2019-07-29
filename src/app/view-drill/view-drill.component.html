@@ -18,9 +18,11 @@
       <ion-card-title> {{ drill.Drill }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <video style="width: 100%" class="video-js" controls autoplay preload="auto">
+      <video crossOrigin="anonymous" style="width: 100%" class="video-js" controls autoplay preload="auto">
         <source [src]="drill.Video" >
       </video>
+
+      <a [attr.href]="drill.Video">Video Link</a>
     </ion-card-content>
   </ion-card>
 
