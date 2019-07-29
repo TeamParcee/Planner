@@ -3,6 +3,8 @@ import { DrillsService } from '../drills.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { ComponentService } from '../component.service';
 import { ViewDrillComponent } from '../view-drill/view-drill.component';
+import { AddDrillComponent } from './add-drill/add-drill.component';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-drill-library',
@@ -17,11 +19,16 @@ export class DrillLibraryPage implements OnInit {
   ) { }
 
 
-  drills:any[] = this.drillService.drillData;
+  drills:any[]  = this.drillService.drillData;
   searchFilter:any[] = [...this.drills];
   ngOnInit() {
   }
 
+  ionViewWillEnter(){
+    this.getDrills();
+    console.log("drills")
+
+  }
 
   search(event){
     
@@ -38,4 +45,18 @@ export class DrillLibraryPage implements OnInit {
   viewDrill(drill){
     this.helper.showModal(ViewDrillComponent, {drill: drill})
   }
+
+  addDrill(){
+    this.helper.showModal(AddDrillComponent, null)
+  }
+
+  getDrills(){
+    firebase.firestore().collection("drills").onSnapshot((snapshot)=>{
+      snapshot.forEach((drill)=>{
+        this.drills.push(drill.data())
+      })
+    })
+  }
+
+  
 }

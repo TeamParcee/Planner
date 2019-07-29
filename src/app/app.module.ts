@@ -24,6 +24,7 @@ import { LoginComponent } from './login/login.component';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { QuillModule } from 'ngx-quill'
+import { AddDrillComponent } from './drill-library/add-drill/add-drill.component';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -46,6 +47,7 @@ firebase.initializeApp(firebaseConfig);
     WeeksComponent,
     ViewDrillComponent,
     LoginComponent,
+    AddDrillComponent,
     CreateEventGroupComponent,
     AddEventComponent,
     EditEventComponent,
@@ -56,6 +58,7 @@ firebase.initializeApp(firebaseConfig);
     ViewDrillComponent,
     WeeksComponent,
     LoginComponent,
+    AddDrillComponent,
     DaysComponent,
     CreateEventGroupComponent,
     AddEventComponent,

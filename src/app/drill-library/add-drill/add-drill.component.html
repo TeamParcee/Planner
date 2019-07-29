@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Drill</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Position</ion-label>
+      <ion-input [(ngModel)]="position"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Drill</ion-label>
+      <ion-input [(ngModel)]="drill"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Video</ion-label>
+      <ion-input [(ngModel)]="video"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button expand="block" [disabled]="!position || !drill || !video" (click)="save()">Save</ion-button>
+</ion-content>
