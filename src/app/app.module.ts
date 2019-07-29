@@ -23,6 +23,7 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { LoginComponent } from './login/login.component';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
+import { QuillModule } from 'ngx-quill'
 
 // Your web app's Firebase configuration
 var firebaseConfig = {

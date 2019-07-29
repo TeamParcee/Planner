@@ -28,12 +28,13 @@
       <ion-label position="stacked">Contact</ion-label>
       <ion-input [(ngModel)]="activity.contact"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label position="stacked">Notes</ion-label>
-      <ion-textarea  style="width: 100%" rows="20" [(ngModel)]="activity.notes"></ion-textarea>
     </ion-item>
+      <quill-editor ion-textarea [(ngModel)]="activity.notes"> </quill-editor>
+      <!-- <ion-textarea quill-editor  style="width: 100%" rows="20" ></ion-textarea> -->
   </ion-list>
 
-
+ 
   
 </ion-content>

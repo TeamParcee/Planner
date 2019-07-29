@@ -37,11 +37,19 @@ const routes: Routes = [
           }
         ]
       },{
-        path: 'about',
+        path: 'events',
         children: [
           {
             path: '',
-            loadChildren: '../about/about.module#AboutPageModule'
+            loadChildren: '../events/events.module#EventsPageModule'
+          }
+        ]
+      },{
+        path: 'news',
+        children: [
+          {
+            path: '',
+            loadChildren: '../news/news.module#NewsPageModule'
           }
         ]
       },

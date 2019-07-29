@@ -4,6 +4,7 @@ import { ActivitiesService } from '../activities.service';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { FirebaseService } from '../firebase.service';
+import * as Quill from 'quill';
 
 @Component({
   selector: 'app-edit-activity',
@@ -25,12 +26,21 @@ export class EditActivityPage implements OnInit {
       this.id = paramMap.get('id');
       this.getActivity();
     })
-
+    var options = {
+      debug: 'info',
+      modules: {
+        toolbar: '#toolbar'
+      },
+      placeholder: 'Compose an epic...',
+      readOnly: true,
+      theme: 'snow'
+    };
+    this.editor = new Quill('#editor', options);
   }
 
   id;
   activity;
-
+  editor
   ionViewWillLeave() {
     this.saveItem(this.activity);
   }

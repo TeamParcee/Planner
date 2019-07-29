@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { ComponentService } from '../component.service';
 import { LoginComponent } from '../login/login.component';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -22,11 +23,17 @@ export class HomePage implements OnInit {
     private helper: ComponentService,
   ) { }
 
+
+  user;
   ngOnInit() {
     this.backgroundMode.enable();
   }
 
   ionViewWillEnter() {
+
+    firebase.auth().onAuthStateChanged((user)=>{
+      this.user = user;
+    })
     this.activeEventGroup = (this.eventService.activeEventGroup) ? this.eventService.activeEventGroup : this.dummyEventGroup;
    
     this.timeService.getTime().subscribe((result)=>{
@@ -47,5 +54,9 @@ export class HomePage implements OnInit {
 
   showLogin(){
     this.helper.showModal(LoginComponent, null)
+  }
+
+  viewProfile(){
+    console.log(this.user)
   }
 }

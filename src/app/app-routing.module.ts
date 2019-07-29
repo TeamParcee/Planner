@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: 'event-group', loadChildren: './event-group/event-group.module#EventGroupPageModule' },
   { path: 'event-groups', loadChildren: './event-groups/event-groups.module#EventGroupsPageModule' },  { path: 'templates', loadChildren: './templates/templates.module#TemplatesPageModule' },
   { path: 'about', loadChildren: './about/about.module#AboutPageModule' },
+  { path: 'news', loadChildren: './news/news.module#NewsPageModule' },
+  { path: 'events', loadChildren: './events/events.module#EventsPageModule' },
 
 ];
 
