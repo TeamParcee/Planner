@@ -6,8 +6,8 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Practice Plan</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="startPlan()">
+    <ion-buttons   slot="end">
+      <ion-button  *ngIf="user" (click)="startPlan()">
         <ion-icon slot="start" name="timer"></ion-icon>
         Start
       </ion-button>
@@ -17,32 +17,31 @@
 </ion-header>
 
 <ion-content>
-  <ion-item text-center>
-    <ion-label (click)="viewDays($event)">Day {{currentDay.day}}</ion-label>
-    <ion-label (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-label>
-  </ion-item>
+    <ion-button fill="clear" (click)="viewDays($event)">Day {{currentDay.day}}</ion-button>
+    <ion-button fill="clear" (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-button>
+    <ion-button *ngIf="user" [disabled]="defaultDay?.day == currentDay?.day && defaultWeek?.week == currentWeek?.week" fill="clear" (click)="makeCurrent()">Make Current</ion-button>
 
 
   <ion-list>
-    <ion-item text-center>
-      <ion-label  (click)="newActivity()"> New Activitiy </ion-label>
-      <ion-label (click)="changeOrder = !changeOrder"> Reorder</ion-label>
-    </ion-item>
     <ion-item>
       <ion-label>
         <p>Total Time: {{ totalTime }} Minutes</p>
       </ion-label>
+      <ion-icon *ngIf="user" (click)="changeOrder = !changeOrder" slot="start" name="reorder"></ion-icon>
     </ion-item>
     <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
       <ion-item *ngFor="let activity of activities">
         <ion-reorder *ngIf="changeOrder"></ion-reorder>
-        <ion-note slot="start"> {{ (activity.duration == "New Duration" ) ? 0 : activity.duration }}</ion-note>
-        <ion-input [disabled]="changeOrder" [ngClass]="{'nonEdit' : editId != activity.id}"
+        <ion-note *ngIf="!changeOrder" slot="start"> {{ (activity.duration == "New Duration" ) ? 0 : activity.duration }}</ion-note>
+        <ion-label *ngIf="!user" [routerLink]="['/view-activity', activity.id]">
+          <h2> {{ activity.name }}</h2>
+        </ion-label>
+        <ion-input *ngIf="user" [disabled]="changeOrder" [ngClass]="{'nonEdit' : editId != activity.id}"
           (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name">
         </ion-input>
 
         <ion-buttons slot="end">
-          <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear"
+          <ion-button *ngIf="user && activity.name != editname && editId != activity.id" fill="clear"
             [routerLink]="['/edit-activity', activity.id]"> Edit </ion-button>
           <ion-button *ngIf="activity.name != editname && editId != activity.id" fill="clear"
             [routerLink]="['/view-activity', activity.id]"> View </ion-button>
@@ -55,6 +54,9 @@
         </ion-buttons>
       </ion-item>
     </ion-reorder-group>
+    <ion-item *ngIf="user" (click)="newActivity()">
+      <ion-label>New Activity</ion-label>
+    </ion-item>
   </ion-list>
 
 

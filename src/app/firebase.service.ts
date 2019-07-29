@@ -7,8 +7,16 @@ import * as firebase from 'firebase';
 })
 export class FirebaseService {
 
-  constructor() { }
+  constructor(
+  ) {
 
+    // firebase.auth().onAuthStateChanged((user)=>{
+    //   this.user = user;
+    // })
+   }
+
+
+   public user = firebase.auth().currentUser;
 
 
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ComponentService } from '../component.service';
 import * as firebase from 'firebase';
+import { FirebaseService } from '../firebase.service';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +11,27 @@ import * as firebase from 'firebase';
 export class LoginComponent implements OnInit {
 
   constructor(
-    private helper: ComponentService
+    private helper: ComponentService,
+    private firebaseService: FirebaseService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 
-  close(){
+  close() {
     this.helper.closeModal();
-    
+
   }
   email;
   password;
 
-  login(){
-    firebase.auth().signInWithEmailAndPassword(this.email ,this.password).then(()=>{
+
+  login() {
+    firebase.auth().signInWithEmailAndPassword(this.email, this.password).then((user) => {
+      this.firebaseService.user = user.user;
+      console.log(user.user);
       this.close()
-    }).catch((e)=>{
+    }).catch((e) => {
       this.helper.showOkAlert("Problem Signing In", e.message)
     })
 
