@@ -110,25 +110,28 @@ export class ViewTemplatesComponent implements OnInit {
 
   }
 
-  confirmDeleteEvent(template) {
+  confirmDeleteEvent() {
     console.log("delete");
-    this.helper.confirmationAlert("Delete All Activities", "Are you sure you want to delete events from all activities" + template.name, { denyText: "Cancel", confirmText: "Delete Activities" })
+    this.helper.confirmationAlert("Delete All Activities", "Are you sure you want to delete events from all activities", { denyText: "Cancel", confirmText: "Delete Activities" })
       .then((result) => {
         if (result) {
-          this.deleteEvents(template)
+          this.deleteEvents()
         }
       })
   }
 
-  deleteEvents(template) {
-    let activites: any[] = template.activities;
+  deleteEvents() {
+    firebase.firestore().collection("activities")
+    .where("day", "==", this.day)
+    .where("week", "==", this.week)
+    .get().then((activities)=>{
+      
+      activities.forEach((activity) => {
+        activity.ref.delete()
+      })
 
-    activites.forEach((activity) => {
-      let a = activity;
-      a.day = this.day;
-      a.week = this.week;
-      this.firebaseService.deleteDocument("activities/" + a.id)
     })
+    
 
   }
 }

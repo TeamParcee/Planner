@@ -7,13 +7,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card style="margin: 0; padding: 0" *ngIf="activity">
-    <ion-card-header>
+<ion-content padding >
+  <ion-card  *ngIf="activity">
+    <ion-card-header padding>
       <ion-card-title> {{  activity.name }}</ion-card-title>
       <ion-card-subtitle> {{   (!activity.duration) ? 0 :activity.duration }} minutes</ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content [innerHTML]="activity.notes">
+    <ion-card-content padding [innerHTML]="activity.notes">
     </ion-card-content>
   </ion-card>
 </ion-content>

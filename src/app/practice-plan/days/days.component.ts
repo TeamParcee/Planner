@@ -23,12 +23,19 @@ export class DaysComponent implements OnInit {
 
   ngOnInit() { 
     this.getDays();
+    this.getUser();
   }
 
   days;
   weekid;
   count;
 
+user;
+  getUser(){
+    firebase.auth().onAuthStateChanged((user)=>{
+      this.user = user;
+    })
+  }
   getDays() {
     firebase.firestore().collection("weeks/" + this.weekid + "/days")
     .orderBy("day")

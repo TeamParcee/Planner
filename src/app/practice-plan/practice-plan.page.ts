@@ -12,7 +12,6 @@ import { EventGroup } from '../event-group';
 import { TemplatesPage } from '../templates/templates.page';
 import { ViewTemplatesComponent } from './view-templates/view-templates.component';
 import { FirebaseService } from '../firebase.service';
-import { ChooseDayofweekComponent } from './choose-dayofweek/choose-dayofweek.component';
 import * as moment from 'moment';
 
 @Component({
@@ -209,6 +208,7 @@ export class PracticePlanPage implements OnInit {
         this.currentDay = x.day;
         this.currentWeek = x.week;
         this.defaultDay = x.day;
+        this.defaultWeek = x.week;
         return resolve()
       });
     })

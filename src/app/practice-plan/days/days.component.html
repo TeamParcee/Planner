@@ -2,7 +2,7 @@
 
   <ion-list>
     <ion-list-header>Days</ion-list-header>
-    <ion-item>
+    <ion-item *ngIf="user">
         <ion-button fill="clear" (click)="newDay()" slot="start">Add</ion-button>
         <ion-button fill="clear" (click)="deleteDay()" slot="end">Delete</ion-button>
       </ion-item>

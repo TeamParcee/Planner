@@ -26,6 +26,14 @@ export class WeeksComponent implements OnInit {
 
   weeks;
   count;
+  user;
+  
+  getUser(){
+    firebase.auth().onAuthStateChanged((user)=>{
+      this.user = user;
+    })
+  }
+
   getWeeks() {
     firebase.firestore().collection("weeks").orderBy("week").onSnapshot((snapshot) => {
       let weeks = [];

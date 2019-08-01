@@ -2,12 +2,9 @@
 
     <ion-list>
       <ion-list-header>Weeks</ion-list-header>
-      <ion-item>
+      <ion-item *ngIf="user">
         <ion-button fill="clear" (click)="newWeek()" slot="start">Add</ion-button>
         <ion-button fill="clear" (click)="deleteWeek()" slot="end">Delete</ion-button>
-      </ion-item>
-      <ion-item  (click)="newWeek()">
-        <ion-label>Add New Week</ion-label>
       </ion-item>
       <ion-item (click)="activeWeek(week)" *ngFor="let week of weeks">
         <ion-label> {{ week.week }}</ion-label>
