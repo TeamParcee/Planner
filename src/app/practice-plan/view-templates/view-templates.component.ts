@@ -64,6 +64,9 @@ export class ViewTemplatesComponent implements OnInit {
     });
   }
 
+
+ 
+
   getTemplates() {
     firebase.firestore().collection("templates").onSnapshot((snapshot) => {
       let templates = [];
@@ -103,6 +106,28 @@ export class ViewTemplatesComponent implements OnInit {
       a.day = this.day;
       a.week = this.week;
       this.firebaseService.addDocument("activities", a)
+    })
+
+  }
+
+  confirmDeleteEvent(template) {
+    console.log("delete");
+    this.helper.confirmationAlert("Delete All Activities", "Are you sure you want to delete events from all activities" + template.name, { denyText: "Cancel", confirmText: "Delete Activities" })
+      .then((result) => {
+        if (result) {
+          this.deleteEvents(template)
+        }
+      })
+  }
+
+  deleteEvents(template) {
+    let activites: any[] = template.activities;
+
+    activites.forEach((activity) => {
+      let a = activity;
+      a.day = this.day;
+      a.week = this.week;
+      this.firebaseService.deleteDocument("activities/" + a.id)
     })
 
   }

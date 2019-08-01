@@ -25,6 +25,10 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { QuillModule } from 'ngx-quill'
 import { AddDrillComponent } from './drill-library/add-drill/add-drill.component';
+import { ChooseDayofweekComponent } from './practice-plan/choose-dayofweek/choose-dayofweek.component';
+import { DatePickerModule } from 'ionic4-date-picker';
+
+
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -48,6 +52,7 @@ firebase.initializeApp(firebaseConfig);
     ViewDrillComponent,
     LoginComponent,
     AddDrillComponent,
+    ChooseDayofweekComponent,
     CreateEventGroupComponent,
     AddEventComponent,
     EditEventComponent,
@@ -58,6 +63,7 @@ firebase.initializeApp(firebaseConfig);
     ViewDrillComponent,
     WeeksComponent,
     LoginComponent,
+    ChooseDayofweekComponent,
     AddDrillComponent,
     DaysComponent,
     CreateEventGroupComponent,
@@ -74,6 +80,7 @@ firebase.initializeApp(firebaseConfig);
     AppRoutingModule],
   providers: [
     StatusBar,
+    DatePickerModule,
     SplashScreen,
     Vibration,
     Shake,

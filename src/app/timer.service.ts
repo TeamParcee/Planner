@@ -72,13 +72,7 @@ export class TimerService {
     this.timerRunning = false;
     this.componentService.showOkAlert(event.name + " starting", event.name + " has started.");
 
-    let shakeTime = setInterval(()=>{
-      this.vibration.vibrate(1000)
-    }, 1000)
 
-    this.shake.startWatch().subscribe(()=>{
-      clearInterval(shakeTime);
-    })
 
   }
 

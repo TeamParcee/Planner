@@ -12,6 +12,8 @@ import { EventGroup } from '../event-group';
 import { TemplatesPage } from '../templates/templates.page';
 import { ViewTemplatesComponent } from './view-templates/view-templates.component';
 import { FirebaseService } from '../firebase.service';
+import { ChooseDayofweekComponent } from './choose-dayofweek/choose-dayofweek.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-practice-plan',
@@ -30,14 +32,13 @@ export class PracticePlanPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getActivities();
-    
+
   }
 
 
 
   currentWeek = this.activityService.activeWeek;
-  currentDay = this.activityService.activeDay;
+  currentDay: any = this.activityService.activeDay;
   defaultDay;
   defaultWeek;
   activities: any[];
@@ -50,16 +51,23 @@ export class PracticePlanPage implements OnInit {
   totalTime;
   changeOrder;
   user;
+  showCalendar;
+  dayofweek;
 
   ionViewWillEnter() {
     this.editId = null;
-    this.getCurrentDay();
+    this.getCurrentDay().then(() => {
+      this.makeCurrent();
+      this.getActivities();
 
-    firebase.auth().onAuthStateChanged((user)=>{
+    })
+
+    firebase.auth().onAuthStateChanged((user) => {
       this.user = user;
     })
   }
   newActivity() {
+    console.log("made");
     let activity = new Activity(this.helper.generateid(), 100, "New Activity", 0, "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
     this.activityService.createActivity(activity);
   }
@@ -75,12 +83,13 @@ export class PracticePlanPage implements OnInit {
         let activities = [];
         snapshot.forEach((activity) => {
           count = count + 1;
-          let a  = activity.data();
-          if(a.duration.length < 2)
-          this.orderArray.push({ order: count, id: activity.id });
-          activities.push(activity.data())
+          let a = activity.data();
+          // if(a.duration.length < 2)
+          this.orderArray.push({ order: count, id: a.id });
+          activities.push(activity.data());
         })
         this.activities = activities;
+        this.updateDayofWeek();
         this.getTotalTime();
       })
   }
@@ -118,6 +127,7 @@ export class PracticePlanPage implements OnInit {
       this.getActivities();
     })
   }
+
   async viewWeeks(ev: any) {
     const popover = await this.popOverController.create({
       component: WeeksComponent,
@@ -132,10 +142,11 @@ export class PracticePlanPage implements OnInit {
   }
 
 
+
   async viewTemplates(ev: any) {
     const popover = await this.popOverController.create({
       component: ViewTemplatesComponent,
-      componentProps: {activities: this.activities, day: this.currentDay.day, week: this.currentWeek.week},
+      componentProps: { activities: this.activities, day: this.currentDay.day, week: this.currentWeek.week },
       event: ev,
       translucent: true
     });
@@ -161,6 +172,7 @@ export class PracticePlanPage implements OnInit {
     this.orderArray.forEach((item) => {
       count = count + 1;
       item.order = count;
+
     })
     ev.detail.complete();
 
@@ -175,26 +187,46 @@ export class PracticePlanPage implements OnInit {
   }
 
 
-  getTotalTime(){
+  getTotalTime() {
     let time = 0;
-    this.activities.forEach((activity)=>{
+    this.activities.forEach((activity) => {
       time = activity.duration + time
     })
     this.totalTime = time;
   }
 
-  makeCurrent(){
-    firebase.firestore().doc("utilities/currentday").set({day: this.currentDay, week: this.currentWeek});
+  makeCurrent() {
+    firebase.firestore().doc("utilities/currentday").set({ day: this.currentDay, week: this.currentWeek });
+    this.getCurrentDay();
   }
 
-  getCurrentDay(){
-    firebase.firestore().doc("utilities/currentday").get().then((snapshot)=>{
-      let x = snapshot.data();
+  getCurrentDay() {
 
-      this.currentDay = x.day;
-      this.currentWeek = x.week;
-      this.defaultDay = x.day;
-      this.defaultWeek = x.week;
-    });
+    return new Promise((resolve) => {
+      return firebase.firestore().doc("utilities/currentday").get().then((snapshot) => {
+        let x = snapshot.data();
+
+        this.currentDay = x.day;
+        this.currentWeek = x.week;
+        this.defaultDay = x.day;
+        return resolve()
+      });
+    })
+
+  }
+
+  updateDayofWeek(){
+
+    firebase.firestore().doc("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
+      let x = snapshot.data();
+      this.dayofweek = x.dayofweek;
+    })
+   
+  }
+  dateSelected(event) {
+    let date = moment(event.toString()).format('ll');
+    this.firebaseService.updateDocument("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id, {dayofweek: date})
+    this.showCalendar = false;
+    this.updateDayofWeek();
   }
 }

@@ -1,9 +1,9 @@
 <ion-content>
   <ion-list-header>Templates</ion-list-header>
-  <ion-item>
-    <ion-label (click)="saveTemplate()">Save as Template</ion-label>
+  <ion-item (click)="saveTemplate()">
+    <ion-label>Save as Template</ion-label>
   </ion-item>
-  <ion-item  *ngFor="let template of templates">
+  <ion-item *ngFor="let template of templates">
 
     <ion-grid>
       <ion-row>
@@ -24,6 +24,8 @@
       </ion-row>
     </ion-grid>
   </ion-item>
-
+  <ion-item color="danger" (click)="confirmDeleteEvent()">
+    <ion-label>Delete All Activitie</ion-label>
+  </ion-item>
 
 </ion-content>
