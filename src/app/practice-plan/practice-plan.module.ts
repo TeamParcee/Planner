@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PracticePlanPage } from './practice-plan.page';
 import { DatePickerModule } from 'ionic4-date-picker'
+import { PipesModule } from '../pipes/pipes.module';
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +21,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     DatePickerModule,
+    PipesModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],

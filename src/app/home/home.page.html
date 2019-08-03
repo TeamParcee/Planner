@@ -43,17 +43,17 @@
       <ion-col>
         <ion-list>
           <ion-list-header>Next Event</ion-list-header>
-          <ion-card>
+          <ion-card *ngIf="nextItem">
             <ion-card-header>
-              <ion-card-title>Practice</ion-card-title>
-              <ion-card-subtitle>7/30/2019 6:30pm - 7:45pm</ion-card-subtitle>
-              <ion-card-subtitle>Ta-ha-zu-ka Park</ion-card-subtitle>
+              <ion-card-title>{{ nextItem.itemType}}</ion-card-title>
+              <ion-card-subtitle>{{ nextItem.datetime | fromNow }}</ion-card-subtitle>
+              <ion-card-subtitle>{{ nextItem.location }}k</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              Please bring cleats, water, and mouth piece
+              {{ nextItem.notes }}
             </ion-card-content>
           </ion-card>
-          <ion-button fill="clear">View other events</ion-button>
+          <ion-button routerLink="/tabs/schedule" fill="clear">View other events</ion-button>
         </ion-list>
       </ion-col>
     </ion-row>

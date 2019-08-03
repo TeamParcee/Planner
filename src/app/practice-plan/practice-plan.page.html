@@ -21,9 +21,17 @@
 
 
   <ion-button color="dark"  [disabled]="!user" fill="clear"
-    (click)="showCalendar = !showCalendar"> {{ (dayofweek) ? dayofweek : "Enter Date" }}</ion-button>
+    (click)="showCalendar = !showCalendar"> {{ (dayofweek) ? dayofweek  : "Enter Date" }}</ion-button>
   <ionic-calendar-date-picker *ngIf="showCalendar" style="max-width: 100px" (onSelect)="dateSelected($event)">
   </ionic-calendar-date-picker>
+
+  <ion-button fill="clear" (click)="showStartTime = !showStartTime">{{ (!startTime) ? "Start Time" : startTime  }}</ion-button>
+
+  <ion-item *ngIf="showStartTime">
+    <ion-label position="stacked">Start Time</ion-label>
+    <ion-datetime (ionChange)="updateStartTime()" displayFormat="hh:mm a"  pickerFormat="hh:mm a" [(ngModel)]="startTime"></ion-datetime>
+  </ion-item>
+  
   <ion-button fill="clear" (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-button>
   <ion-button fill="clear" (click)="viewDays($event)">Day {{currentDay.day}}</ion-button>
   <ion-button *ngIf="user" [disabled]="defaultDay?.day == currentDay?.day && defaultWeek?.week == currentWeek?.week"
@@ -32,7 +40,7 @@
     <ion-item>
       <ion-label>
         <p>
-          Total Time: {{ totalTime }} Minutes
+             Total Time: {{ totalTime }} Minutes 
         </p>
       </ion-label>
       <ion-icon *ngIf="user" (click)="changeOrder = !changeOrder" slot="start" name="reorder"></ion-icon>
@@ -45,7 +53,7 @@
         <ion-label style="font-size: 18p" ion-button color="dark" fill="clear"
           [routerLink]="['/view-activity', activity.id]">
           <h2> {{ activity.name }} </h2>
-          <p>{{ (activity.duration == "New Duration" ) ? 0 : activity.duration }} minutes</p>
+          <p>{{ (activity.duration == "New Duration" ) ? 0 : activity.duration }} minutes - {{ activity.time}} </p>
         </ion-label>
         <!-- <ion-input *ngIf="user" [disabled]="changeOrder" [ngClass]="{'nonEdit' : editId != activity.id}"
           (ionFocus)="editId = activity.id; editname = activity.name" type="text" [(ngModel)]="activity.name">

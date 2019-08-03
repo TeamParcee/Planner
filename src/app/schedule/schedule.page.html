@@ -11,7 +11,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-button fill="clear">View past events</ion-button>
+    <ion-button (click)="viewPastEvents()" fill="clear">View past events</ion-button>
     <ion-item-divider>Next Event</ion-item-divider>
     <ion-card *ngIf="nextItem">
       <ion-card-header>
@@ -29,7 +29,7 @@
 
     <ion-item-divider>Future Events</ion-item-divider>
 
-    <ion-item *ngFor="let event of schedule">
+    <ion-item (click)="viewEvent(event)" *ngFor="let event of schedule">
       <ion-label>
         <h2> {{ event.itemType }}</h2>
         <p>{{ event.datetime | fromNow   }}</p>

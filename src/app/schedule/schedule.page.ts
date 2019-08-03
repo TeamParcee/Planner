@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ComponentService } from '../component.service';
 import { NewScheduleItemComponent } from './new-schedule-item/new-schedule-item.component';
 import * as firebase from 'firebase';
+import { PastEventsComponent } from './past-events/past-events.component';
+import { ViewScheduleItemComponent } from './view-schedule-item/view-schedule-item.component';
 
 @Component({
   selector: 'app-schedule',
@@ -28,8 +30,13 @@ export class SchedulePage implements OnInit {
     this.helper.showModal(NewScheduleItemComponent, null)
   }
 
+  viewPastEvents(){
+    this.helper.showModal(PastEventsComponent, null);
+  }
   getSchedule() {
-    firebase.firestore().collection("schedule").onSnapshot((snapshot) => {
+    firebase.firestore().collection("schedule")
+    .orderBy("datetime")
+    .onSnapshot((snapshot) => {
       let schedule = [];
       snapshot.forEach((event) => {
         let date = new Date(event.data().datetime);
@@ -42,5 +49,9 @@ export class SchedulePage implements OnInit {
       this.schedule = schedule.slice(1);
       this.nextItem = schedule.shift();
     })
+  }
+
+  viewEvent(item){
+    this.helper.showModal(ViewScheduleItemComponent, {item:item})
   }
 }

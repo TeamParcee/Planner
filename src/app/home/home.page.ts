@@ -25,8 +25,11 @@ export class HomePage implements OnInit {
 
 
   user;
+  nextItem;
+
   ngOnInit() {
     this.backgroundMode.enable();
+    this.getSchedule();
   }
 
   ionViewWillEnter() {
@@ -59,4 +62,22 @@ export class HomePage implements OnInit {
   viewProfile(){
     console.log(this.user)
   }
+
+  getSchedule() {
+    firebase.firestore().collection("schedule")
+    .orderBy("datetime")
+    .onSnapshot((snapshot) => {
+      let schedule = [];
+      snapshot.forEach((event) => {
+        let date = new Date(event.data().datetime);
+        let today = new Date();
+        if (date > today) {
+          schedule.push(event.data());
+        }
+
+      })
+      this.nextItem = schedule.shift();
+    })
+  }
+
 }

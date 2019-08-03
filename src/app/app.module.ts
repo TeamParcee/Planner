@@ -28,6 +28,9 @@ import { AddDrillComponent } from './drill-library/add-drill/add-drill.component
 import { DatePickerModule } from 'ionic4-date-picker';
 import { NewScheduleItemComponent } from './schedule/new-schedule-item/new-schedule-item.component';
 import { FromNowPipe } from './pipes/from-now.pipe';
+import { PastEventsComponent } from './schedule/past-events/past-events.component';
+import { PipesModule } from './pipes/pipes.module';
+import { ViewScheduleItemComponent } from './schedule/view-schedule-item/view-schedule-item.component';
 
 
 
@@ -58,6 +61,8 @@ firebase.initializeApp(firebaseConfig);
     EditEventComponent,
     NewScheduleItemComponent,
     ViewTemplatesComponent,
+    PastEventsComponent,
+    ViewScheduleItemComponent,
 
   ],
   entryComponents: [
@@ -71,11 +76,14 @@ firebase.initializeApp(firebaseConfig);
     NewScheduleItemComponent,
     EditEventComponent,
     ViewTemplatesComponent,
+    PastEventsComponent,
+    ViewScheduleItemComponent,
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
+    PipesModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule],
