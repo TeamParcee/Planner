@@ -37,11 +37,11 @@ const routes: Routes = [
           }
         ]
       },{
-        path: 'events',
+        path: 'schedule',
         children: [
           {
             path: '',
-            loadChildren: '../events/events.module#EventsPageModule'
+            loadChildren: '../schedule/schedule.module#SchedulePageModule'
           }
         ]
       },{

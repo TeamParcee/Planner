@@ -26,6 +26,8 @@ import { Shake } from '@ionic-native/shake/ngx';
 import { QuillModule } from 'ngx-quill'
 import { AddDrillComponent } from './drill-library/add-drill/add-drill.component';
 import { DatePickerModule } from 'ionic4-date-picker';
+import { NewScheduleItemComponent } from './schedule/new-schedule-item/new-schedule-item.component';
+import { FromNowPipe } from './pipes/from-now.pipe';
 
 
 
@@ -54,6 +56,7 @@ firebase.initializeApp(firebaseConfig);
     CreateEventGroupComponent,
     AddEventComponent,
     EditEventComponent,
+    NewScheduleItemComponent,
     ViewTemplatesComponent,
 
   ],
@@ -65,6 +68,7 @@ firebase.initializeApp(firebaseConfig);
     DaysComponent,
     CreateEventGroupComponent,
     AddEventComponent,
+    NewScheduleItemComponent,
     EditEventComponent,
     ViewTemplatesComponent,
   ],

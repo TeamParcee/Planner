@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ComponentService } from '../component.service';
+import { NewScheduleItemComponent } from './new-schedule-item/new-schedule-item.component';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-schedule',
@@ -7,9 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SchedulePage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private helper: ComponentService,
 
+  ) { }
+
+  schedule;
+  nextItem;
   ngOnInit() {
   }
 
+  ionViewWillEnter() {
+    this.getSchedule();
+  }
+
+  newItem() {
+    this.helper.showModal(NewScheduleItemComponent, null)
+  }
+
+  getSchedule() {
+    firebase.firestore().collection("schedule").onSnapshot((snapshot) => {
+      let schedule = [];
+      snapshot.forEach((event) => {
+        let date = new Date(event.data().datetime);
+        let today = new Date();
+        if (date > today) {
+          schedule.push(event.data());
+        }
+
+      })
+      this.schedule = schedule.slice(1);
+      this.nextItem = schedule.shift();
+    })
+  }
 }
