@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Coach</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar></ion-searchbar>
+
+  <ion-list>
+    <ion-item (click)="selectCoach(coach)" *ngFor="let coach of coaches">
+      <ion-label>
+        {{ coach.fname }} {{ coach.lname }}
+        <p> {{ coach.username }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

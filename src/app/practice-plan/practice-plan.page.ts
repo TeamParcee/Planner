@@ -11,6 +11,8 @@ import { EventsService } from '../events.service';
 import { ViewTemplatesComponent } from './view-templates/view-templates.component';
 import { FirebaseService } from '../firebase.service';
 import * as moment from 'moment';
+import { UserService } from '../user.service';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -27,6 +29,8 @@ export class PracticePlanPage implements OnInit {
     private eventService: EventsService,
     private navCtrl: NavController,
     private firebaseService: FirebaseService,
+    private userService: UserService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -52,17 +56,21 @@ export class PracticePlanPage implements OnInit {
   showCalendar;
   dayofweek;
   startTime;
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.getUser()
     this.editId = null;
     this.getCurrentDay().then(() => {
+      console.log("ere");
       this.makeCurrent();
       this.getActivities();
 
     })
 
-    firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-    })
+
+  }
+
+  async getUser() {
+    this.user = await this.userService.getUserDataFromUid(this.authService.user.uid)
   }
   newActivity() {
     let activity = new Activity(this.helper.generateid(), 100, "New Activity", 0, "Contact Level", "Please enter some notes...", this.currentDay.day, this.currentWeek.week);
@@ -71,7 +79,7 @@ export class PracticePlanPage implements OnInit {
 
   async getActivities() {
     let count = 0;
-    firebase.firestore().collection("activities")
+    firebase.firestore().collection("/users/" + this.user.coach + "/activities")
       .where("day", "==", this.currentDay.day)
       .where("week", "==", this.currentWeek.week)
       .orderBy("order")
@@ -79,7 +87,7 @@ export class PracticePlanPage implements OnInit {
         await this.getStartTime();
         this.orderArray = [];
         let activities = [];
-        let time =  this.startTime;
+        let time = this.startTime;
         let minutes = 0;
         snapshot.forEach((activity) => {
           count = count + 1;
@@ -90,9 +98,9 @@ export class PracticePlanPage implements OnInit {
           activities.push(a);
           time = a.time;
           minutes = a.duration;
-          console.log(time, minutes, "sdafsadf");
         })
         this.activities = activities;
+        console.log(this.activities, "fdsafsadf");
         this.updateDayofWeek();
         this.getTotalTime();
 
@@ -164,7 +172,7 @@ export class PracticePlanPage implements OnInit {
   updateOrder() {
 
     this.orderArray.forEach((item) => {
-      firebase.firestore().doc("/activities/" + item.id).update({ order: item.order })
+      firebase.firestore().doc("/users/" + this.user.uid + "/activities" + item.id).update({ order: item.order })
     })
   }
 
@@ -201,21 +209,25 @@ export class PracticePlanPage implements OnInit {
   }
 
   makeCurrent() {
-    firebase.firestore().doc("utilities/currentday").set({ day: this.currentDay, week: this.currentWeek });
+    firebase.firestore().doc("/users/" + this.user.uid + "/utilities/currentday").set({ day: this.currentDay, week: this.currentWeek });
     this.getCurrentDay();
   }
 
   getCurrentDay() {
 
     return new Promise((resolve) => {
-      return firebase.firestore().doc("utilities/currentday").get().then((snapshot) => {
+      return firebase.firestore().doc("/users/" + this.user.uid + "/utilities/currentday").get().then((snapshot) => {
         let x = snapshot.data();
+        if (x) {
+          this.currentDay = x.day;
+          this.currentWeek = x.week;
+          this.defaultDay = x.day;
+          this.defaultWeek = x.week;
+          return resolve()
+        } else {
+          return resolve()
+        }
 
-        this.currentDay = x.day;
-        this.currentWeek = x.week;
-        this.defaultDay = x.day;
-        this.defaultWeek = x.week;
-        return resolve()
       });
     })
 
@@ -223,7 +235,7 @@ export class PracticePlanPage implements OnInit {
 
   updateDayofWeek() {
 
-    firebase.firestore().doc("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
+    firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
       let x = snapshot.data();
       this.dayofweek = x.dayofweek;
     })
@@ -231,20 +243,20 @@ export class PracticePlanPage implements OnInit {
   }
   dateSelected(event) {
     let date = moment(event.toString()).format('ll');
-    this.firebaseService.updateDocument("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id, { dayofweek: date })
+    this.firebaseService.updateDocument("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id, { dayofweek: date })
     this.showCalendar = false;
     this.updateDayofWeek();
   }
 
   updateStartTime() {
     let time = moment(this.startTime, "hh:mm a").format("LT");
-    firebase.firestore().doc("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
+    firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
     this.getActivities();
   }
 
   getStartTime() {
     return new Promise((resolve) => {
-      return firebase.firestore().doc("weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
+      return firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
         let startTime = snapshot.data().startTime;
         this.startTime = (startTime) ? startTime : "Start Time";
         return resolve()

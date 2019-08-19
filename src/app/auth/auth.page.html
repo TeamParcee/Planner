@@ -1,0 +1,55 @@
+<ion-content padding>
+
+  <h1 class="logo">GFPlanner</h1>
+  <form *ngIf="!createAccount" [formGroup]="loginForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="full" (click)="login()" [disabled]="!loginForm">Login</ion-button>
+    <ion-button expand="full" fill="clear" (click)="createAccount = true" [disabled]="!loginForm">Create Account
+    </ion-button>
+  </form>
+
+  <form *ngIf="createAccount" [formGroup]="registerForm">
+    <ion-list>
+      <ion-item lines="none">
+        <ion-label>I am a Head Coach</ion-label>
+        <ion-checkbox checked="false" formControlName="isCoach"></ion-checkbox>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">User Name</ion-label>
+        <ion-input type="text" formControlName="username"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input type="text" formControlName="fname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Last Name</ion-label>
+        <ion-input type="text" formControlName="lname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="full" (click)="register()" [disabled]="!registerForm">Create Account</ion-button>
+    <ion-button expand="full" fill="clear" (click)="createAccount = false" [disabled]="!loginForm">Already have an Account
+    </ion-button>
+  </form>
+</ion-content>

@@ -1,23 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons *ngIf="user">
-      <ion-button (click)="viewProfile()">
-        <ion-icon slot="icon-only" name="contact"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+
     <ion-title>
       Home
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="showLogin()">
-        <ion-icon name="log-in"></ion-icon>
+      <ion-button routerLink="/profile">
+        <ion-icon slot="icon-only" name="contact"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+<h3 *ngIf="user?.isCoach" padding>Welcome Coach {{ user?.lname }}</h3>
   <ion-grid *ngIf="currentEvent" style="height: 60%" padding-none>
     <ion-row justify-content-center align-items-center style="height: 100%">
       <ion-col style="margin: auto" padding-none size-sm="4" offset-sm="4">

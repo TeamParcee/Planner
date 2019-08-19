@@ -7,6 +7,10 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { ComponentService } from '../component.service';
 import { LoginComponent } from '../login/login.component';
 import * as firebase from 'firebase';
+import { HelperService } from '../helper.service';
+import { ProfilePage } from '../profile/profile.page';
+import { AuthService } from '../auth/auth.service';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -20,7 +24,9 @@ export class HomePage implements OnInit {
     private backgroundMode: BackgroundMode,
     private eventService: EventsService,
     private timeService: TimerService,
-    private helper: ComponentService,
+    private helper: HelperService,
+    private authService: AuthService,
+    private userService: UserService,
   ) { }
 
 
@@ -32,11 +38,13 @@ export class HomePage implements OnInit {
     this.getSchedule();
   }
 
+  async getUser(){
+    this.user = await this.userService.getUserDataFromUid(this.authService.user.uid);
+    console.log(this.user, "asadfsadf");
+  }
   ionViewWillEnter() {
 
-    firebase.auth().onAuthStateChanged((user)=>{
-      this.user = user;
-    })
+    this.getUser();
     this.activeEventGroup = (this.eventService.activeEventGroup) ? this.eventService.activeEventGroup : this.dummyEventGroup;
    
     this.timeService.getTime().subscribe((result)=>{
@@ -56,7 +64,7 @@ export class HomePage implements OnInit {
 
 
   showLogin(){
-    this.helper.showModal(LoginComponent, null)
+    this.helper.openModal(LoginComponent, null)
   }
 
   viewProfile(){
@@ -79,5 +87,5 @@ export class HomePage implements OnInit {
       this.nextItem = schedule.shift();
     })
   }
-
+ 
 }

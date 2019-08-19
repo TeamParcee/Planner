@@ -25,7 +25,7 @@
   <ionic-calendar-date-picker *ngIf="showCalendar" style="max-width: 100px" (onSelect)="dateSelected($event)">
   </ionic-calendar-date-picker>
 
-  <ion-button fill="clear" (click)="showStartTime = !showStartTime">{{ (!startTime) ? "Start Time" : startTime  }}</ion-button>
+  <ion-button fill="clear" (click)="showStartTime = !showStartTime">{{ (!startTime) ? "Start Time" : (startTime | date: 'shortTime')  }}</ion-button>
 
   <ion-item *ngIf="showStartTime">
     <ion-label position="stacked">Start Time</ion-label>

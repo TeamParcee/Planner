@@ -4,6 +4,8 @@ import { ComponentService } from 'src/app/component.service';
 import * as firebase from 'firebase';
 import { AlertInput } from '@ionic/core';
 import { PopoverController } from '@ionic/angular';
+import { UserService } from 'src/app/user.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 @Component({
@@ -17,10 +19,14 @@ export class ViewTemplatesComponent implements OnInit {
     private firebaseService: FirebaseService,
     private helper: ComponentService,
     private popoverCtrl: PopoverController,
+    private userService: UserService,
+    private authService: AuthService,
   ) { }
 
-  ngOnInit() {
-    this.getTemplates()
+  async ngOnInit() {
+    await this.getUser();
+    this.getTemplates();
+    
   }
 
 
@@ -30,13 +36,17 @@ export class ViewTemplatesComponent implements OnInit {
   week;
   templateName;
   templates;
+  user;
 
+ async getUser(){
+    this.user = await this.userService.getUserDataFromUid(this.authService.user.uid)
+  }
   createTemplate(name) {
     this.template = {
       name: name,
       activities: this.activities,
     }
-    this.firebaseService.addDocument("templates", this.template)
+    this.firebaseService.addDocument("users/" + this.user.uid + "/templates", this.template)
   }
 
   createFromTemplate(template) {
@@ -45,7 +55,7 @@ export class ViewTemplatesComponent implements OnInit {
     activites.forEach((activity) => {
       activity.day = this.day;
       activity.week = this.week;
-      this.firebaseService.addDocument("/activities/", activity);
+      this.firebaseService.addDocument("users/" + this.user.coach + "/activities/", activity);
     })
     this.helper.showOkAlert("Plan Created", "The Practice Plan has been created from the template " + template.templateName)
   }
@@ -68,7 +78,7 @@ export class ViewTemplatesComponent implements OnInit {
  
 
   getTemplates() {
-    firebase.firestore().collection("templates").onSnapshot((snapshot) => {
+    firebase.firestore().collection("users/" + this.user.uid + "/templates").onSnapshot((snapshot) => {
       let templates = [];
       snapshot.forEach((template) => {
         templates.push(template.data())
@@ -86,7 +96,7 @@ export class ViewTemplatesComponent implements OnInit {
       })
   }
   deleteTemplate(template) {
-    this.firebaseService.deleteDocument("templates/" + template.id);
+    this.firebaseService.deleteDocument("users/" + this.user.uid + "/templates" + template.id);
   }
 
   confirmCreate(template) {
@@ -105,7 +115,7 @@ export class ViewTemplatesComponent implements OnInit {
       let a = activity;
       a.day = this.day;
       a.week = this.week;
-      this.firebaseService.addDocument("activities", a)
+      this.firebaseService.addDocument("users/" + this.user.coach + "/activities/", a)
     })
 
   }
@@ -121,7 +131,7 @@ export class ViewTemplatesComponent implements OnInit {
   }
 
   deleteEvents() {
-    firebase.firestore().collection("activities")
+    firebase.firestore().collection("users/" + this.user.coach + "/activities/")
     .where("day", "==", this.day)
     .where("week", "==", this.week)
     .get().then((activities)=>{
