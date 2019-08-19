@@ -17,7 +17,7 @@
   <ion-list *ngIf="user">
     <ion-button *ngIf="!user.isCoach" fill="clear" (click)="isCoachNow()"> I am a Head Coach</ion-button>
     <ion-button *ngIf="user.isCoach" fill="clear" (click)="isNotCoachNow()"> Remove as Coach</ion-button>
-    <ion-button fill="clear" (click)="changeCoach()"> Change Coach</ion-button>
+    <ion-button *ngIf="!user.isCoach" fill="clear" (click)="changeCoach()"> Change Coach</ion-button>
     <ion-item>
         <ion-label position="stacked">Head Coach</ion-label>
         <ion-input [disabled]="true" [(ngModel)]="coach"></ion-input>

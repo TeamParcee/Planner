@@ -28,23 +28,22 @@ export class ActivitiesService {
     this.user = await this.userService.getUserDataFromUid(this.authService.user.uid)
   }
   async createActivity(activity: Activity) {
-
     return await this.firebaseService.addDocument("users/" + this.user.coach + "/activities", activity);
   
   }
 
   async updateActivity(activity: Activity) {
-    return await this.firebaseService.updateDocument("users/" + this.user.coach + "/activities" + activity.id, activity)
+    return await this.firebaseService.updateDocument("users/" + this.user.coach + "/activities/" + activity.id, activity)
   }
 
   async deleteActivity(activity: Activity) {
-    return await this.firebaseService.deleteDocument("users/" + this.user.coach + "/activities" + activity.id)
+    return await this.firebaseService.deleteDocument("users/" + this.user.coach + "/activities/" + activity.id)
   }
 
   
   async getActivity(id) {
     return new Promise((resolve) => {
-      return firebase.firestore().doc("users/" + this.user.coach + "/activities" + id).get().then((snapshot) => {
+      return firebase.firestore().doc("users/" + this.user.coach + "/activities/" + id).get().then((snapshot) => {
         return resolve(snapshot.data())
       })
     })

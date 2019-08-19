@@ -28,14 +28,19 @@ export class WeeksComponent implements OnInit {
     await this.getUser();
     this.getWeeks();
     
+
   }
 
 
   weeks;
   count;
   user;
-  
-  async getUser(){
+  weekid;
+  weekCount;
+  dayCount;
+  days:any;
+
+  async getUser() {
     this.user = await this.userService.getUserDataFromUid(this.authService.user.uid);
   }
 
@@ -45,27 +50,45 @@ export class WeeksComponent implements OnInit {
       snapshot.forEach((week) => {
         weeks.push(week.data())
       })
+      this.getDays();
       this.weeks = [...weeks];
-      this.count = (this.weeks.length) ? this.weeks.length : 0;
-      console.log(this.weeks)
+      this.weekCount = (this.weeks.length) ? this.weeks.length : 0;
     })
   }
 
+  getDays() {
+    firebase.firestore().collection("users/" + this.user.coach + "/weeks/" + this.weekid + "/days")
+      .orderBy("day")
+      .onSnapshot((snapshot) => {
+        let days = [];
+        snapshot.forEach((day) => {
+          days.push(day.data())
+        })
+        this.days = days;
+        this.dayCount = (this.days.count) ? this.days.count : this.days.length;
+      })
+  }
   newWeek() {
-    this.firebaseService.addDocument("users/" + this.user.coach + "/weeks", { week: (this.count + 1) })
+    this.firebaseService.addDocument("users/" + this.user.coach + "/weeks", { week: (this.weekCount + 1) });
+    this.newDay();
   }
 
   deleteWeek() {
     this.helper.confirmationAlert("Delete Week", "Are you sure you want to delete the last week? All Practice Days will also be deleted.", { denyText: "Cancel", confirmText: "Delete Week" })
       .then((result) => {
         if (result) {
-          this.firebaseService.deleteDocument("users/" + this.user.coach + "/weeks/" + this.weeks[(this.count - 1)].id)
+          this.firebaseService.deleteDocument("users/" + this.user.coach + "/weeks/" + this.weeks[(this.weekCount - 1)].id)
         }
       })
   }
 
-  activeWeek(week){
+  activeWeek(week) {
     this.activityService.activeWeek = week;
     this.popoverCtrl.dismiss();
-    }
+  }
+
+  newDay() {
+    console.log(this.dayCount);
+    this.firebaseService.addDocument("users/" + this.user.coach + "/weeks/" + (this.weekCount + 1) + "/days", { day: (this.dayCount + 1) })
+  }
 }

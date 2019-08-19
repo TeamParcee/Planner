@@ -56,11 +56,12 @@ export class PracticePlanPage implements OnInit {
   showCalendar;
   dayofweek;
   startTime;
+
+
   async ionViewWillEnter() {
-    await this.getUser()
+    await this.getUser();
     this.editId = null;
     this.getCurrentDay().then(() => {
-      console.log("ere");
       this.makeCurrent();
       this.getActivities();
 
@@ -100,7 +101,6 @@ export class PracticePlanPage implements OnInit {
           minutes = a.duration;
         })
         this.activities = activities;
-        console.log(this.activities, "fdsafsadf");
         this.updateDayofWeek();
         this.getTotalTime();
 
@@ -216,18 +216,21 @@ export class PracticePlanPage implements OnInit {
   getCurrentDay() {
 
     return new Promise((resolve) => {
-      return firebase.firestore().doc("/users/" + this.user.uid + "/utilities/currentday").get().then((snapshot) => {
-        let x = snapshot.data();
-        if (x) {
-          this.currentDay = x.day;
-          this.currentWeek = x.week;
-          this.defaultDay = x.day;
-          this.defaultWeek = x.week;
-          return resolve()
-        } else {
-          return resolve()
-        }
+      return firebase.firestore().doc("/users/" + this.user.coach + "/utilities/currentday").get().then((snapshot) => {
+        if (snapshot.exists) {
+          let x = snapshot.data();
+          if (x) {
+            this.currentDay = x.day;
+            this.currentWeek = x.week;
+            this.defaultDay = x.day;
+            this.defaultWeek = x.week;
+            return resolve()
+          } else {
+            return resolve()
+          }
 
+        }
+        return resolve();
       });
     })
 
@@ -236,8 +239,10 @@ export class PracticePlanPage implements OnInit {
   updateDayofWeek() {
 
     firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
-      let x = snapshot.data();
-      this.dayofweek = x.dayofweek;
+      if (snapshot.exists) {
+        let x = snapshot.data();
+        this.dayofweek = x.dayofweek;
+      }
     })
 
   }
@@ -250,16 +255,22 @@ export class PracticePlanPage implements OnInit {
 
   updateStartTime() {
     let time = moment(this.startTime, "hh:mm a").format("LT");
-    firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
+    firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
     this.getActivities();
   }
 
   getStartTime() {
     return new Promise((resolve) => {
       return firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
-        let startTime = snapshot.data().startTime;
-        this.startTime = (startTime) ? startTime : "Start Time";
-        return resolve()
+        if (snapshot.exists) {
+          let startTime = snapshot.data().startTime;
+          this.startTime = (startTime) ? startTime : "Start Time";
+          return resolve()
+        } else {
+          this.startTime = "Start Time";
+          return resolve()
+        }
+
       })
     })
 

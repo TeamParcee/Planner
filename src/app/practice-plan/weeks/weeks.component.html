@@ -2,7 +2,7 @@
 
     <ion-list>
       <ion-list-header>Weeks</ion-list-header>
-      <ion-item *ngIf="user">
+      <ion-item *ngIf="user?.isCoach">
         <ion-button fill="clear" (click)="newWeek()" slot="start">Add</ion-button>
         <ion-button fill="clear" (click)="deleteWeek()" slot="end">Delete</ion-button>
       </ion-item>
