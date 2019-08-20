@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'events', loadChildren: './events/events.module#EventsPageModule', canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule',  },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule', canActivate: [AuthGuard]  },
-  { path: 'select-coach', loadChildren: './select-coach/select-coach.module#SelectCoachPageModule' },
+  { path: 'select-coach', loadChildren: './select-coach/select-coach.module#SelectCoachPageModule' },  { path: 'add-news', loadChildren: './news/add-news/add-news.module#AddNewsPageModule' },
+
 
 
 

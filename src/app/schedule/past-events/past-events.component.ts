@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
 import { ComponentService } from 'src/app/component.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-past-events',
@@ -10,19 +12,26 @@ import { ComponentService } from 'src/app/component.service';
 export class PastEventsComponent implements OnInit {
 
   constructor(
-    private helper: ComponentService
+    private helper: ComponentService,
+    private userService: UserService,
+    private authService: AuthService
   ) { }
 
   schedule;
+  user;
+
   ngOnInit() {}
 
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
+    await this.getUser();
     this.getSchedule();
   }
   
-
+  async getUser(){
+    this.user = await this.userService.getUserDataFromUid(this.authService.user.uid)
+  }
   getSchedule() {
-    firebase.firestore().collection("schedule")
+    firebase.firestore().collection("users/" + this.user.coach + "/schedule")
     .orderBy("datetime", "desc")
     .onSnapshot((snapshot) => {
       let schedule = [];

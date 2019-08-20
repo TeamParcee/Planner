@@ -255,7 +255,7 @@ export class PracticePlanPage implements OnInit {
 
   updateStartTime() {
     let time = moment(this.startTime, "hh:mm a").format("LT");
-    firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
+    firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
     this.getActivities();
   }
 

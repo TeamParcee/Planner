@@ -22,6 +22,7 @@
     "@angular/router": "^7.2.2",
     "@ionic-native/background-mode": "^5.10.0",
     "@ionic-native/core": "^5.0.0",
+    "@ionic-native/in-app-browser": "^5.12.0",
     "@ionic-native/keyboard": "^5.10.0",
     "@ionic-native/local-notifications": "^5.11.0",
     "@ionic-native/shake": "^5.10.0",
@@ -33,6 +34,7 @@
     "cordova-ios": "^5.0.1",
     "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-ionic": "^5.4.1",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-shake": "^0.6.0",
@@ -106,7 +108,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-vibration": {},
       "cordova-plugin-local-notification": {},
-      "cordova-plugin-shake": {}
+      "cordova-plugin-shake": {},
+      "cordova-plugin-inappbrowser": {}
     },
     "platforms": [
       "ios"

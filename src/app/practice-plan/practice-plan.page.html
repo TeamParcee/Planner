@@ -29,7 +29,7 @@
 
   <ion-item *ngIf="showStartTime">
     <ion-label position="stacked">Start Time</ion-label>
-    <ion-datetime (ionChange)="updateStartTime()"  displayFormat="hh:mm a"  pickerFormat="hh:mm a" [(ngModel)]="startTime"></ion-datetime>
+    <ion-datetime (ionChange)="updateStartTime()" minuteValues="00, 15, 30, 45"  displayFormat="hh:mm a"  pickerFormat="hh:mm a" [(ngModel)]="startTime"></ion-datetime>
   </ion-item>
   
   <ion-button fill="clear" (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-button>

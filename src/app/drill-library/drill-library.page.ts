@@ -5,6 +5,7 @@ import { ComponentService } from '../component.service';
 import { ViewDrillComponent } from '../view-drill/view-drill.component';
 import { AddDrillComponent } from './add-drill/add-drill.component';
 import * as firebase from 'firebase';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-drill-library',
@@ -14,6 +15,7 @@ import * as firebase from 'firebase';
 export class DrillLibraryPage implements OnInit {
 
   constructor(
+    private iab: InAppBrowser,
     private drillService: DrillsService,
     private helper: ComponentService
   ) { }
@@ -43,7 +45,9 @@ export class DrillLibraryPage implements OnInit {
 
 
   viewDrill(drill){
-    this.helper.showModal(ViewDrillComponent, {drill: drill})
+    // this.helper.showModal(ViewDrillComponent, {drill: drill})
+    console.log(drill.Video);
+    this.iab.create(drill.Video);
   }
 
   addDrill(){
