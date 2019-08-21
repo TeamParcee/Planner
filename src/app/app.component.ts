@@ -14,7 +14,6 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private background: BackgroundMode,
   ) {
     this.initializeApp();
   }
@@ -22,7 +21,6 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleLightContent();
-      this.background.enable();
       this.splashScreen.hide();
     });
   }

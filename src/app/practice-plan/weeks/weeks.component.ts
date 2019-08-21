@@ -25,20 +25,23 @@ export class WeeksComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.getUser();
-    this.getWeeks();
-    
+
 
   }
 
+  async ionViewWillEnter() {
+    await this.getUser();
+    console.log(this.user);
+    this.getWeeks();
 
+  }
   weeks;
   count;
   user;
   weekid;
   weekCount;
   dayCount;
-  days:any;
+  days: any;
 
   async getUser() {
     this.user = await this.userService.getUserDataFromUid(this.authService.user.uid);

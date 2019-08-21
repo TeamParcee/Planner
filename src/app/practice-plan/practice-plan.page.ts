@@ -13,6 +13,10 @@ import { FirebaseService } from '../firebase.service';
 import * as moment from 'moment';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth/auth.service';
+import { TimerService } from '../timer.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { promise } from 'protractor';
 
 
 @Component({
@@ -31,10 +35,13 @@ export class PracticePlanPage implements OnInit {
     private firebaseService: FirebaseService,
     private userService: UserService,
     private authService: AuthService,
+    private timerService: TimerService,
+    private localNotifications: LocalNotifications,
+    private background: BackgroundMode,
   ) { }
 
   ngOnInit() {
-
+    
   }
 
 
@@ -56,15 +63,19 @@ export class PracticePlanPage implements OnInit {
   showCalendar;
   dayofweek;
   startTime;
-
-
+  count = 0;
+  length;
+  timerInterval;
+  activeTime;
+  activeActivity;
+  activeStart;
   async ionViewWillEnter() {
     await this.getUser();
+    
     this.editId = null;
-    this.getCurrentDay().then(() => {
+    this.getCurrentDay().then(async () => {
       this.makeCurrent();
-      this.getActivities();
-
+      this.getActivities()
     })
 
 
@@ -79,6 +90,7 @@ export class PracticePlanPage implements OnInit {
   }
 
   async getActivities() {
+    this.updateDayofWeek();
     let count = 0;
     firebase.firestore().collection("/users/" + this.user.coach + "/activities")
       .where("day", "==", this.currentDay.day)
@@ -94,6 +106,7 @@ export class PracticePlanPage implements OnInit {
           count = count + 1;
           let a = activity.data();
           a.time = this.getTimeOfEvent(time, minutes);
+          a.date = this.dayofweek;
           // if(a.duration.length < 2)
           this.orderArray.push({ order: count, id: a.id });
           activities.push(a);
@@ -103,8 +116,10 @@ export class PracticePlanPage implements OnInit {
         this.activities = activities;
         this.updateDayofWeek();
         this.getTotalTime();
+     
 
       })
+     
   }
 
 
@@ -193,13 +208,60 @@ export class PracticePlanPage implements OnInit {
 
   }
 
-  startPlan() {
-    let eventGroup: any = [...this.activities];
-    this.eventService.startEvent(eventGroup);
-    this.navCtrl.navigateBack("/tabs/home")
+  stopPlan(){
+    this.firebaseService.setDocument("users/" + this.user.uid + "/utilities/activeActivity", {active: false})
+    this.activeActivity = null;
+    clearInterval(this.timerInterval);
+    this.count = 0
   }
+  startPlan() {
+    this.firebaseService.setDocument("users/" + this.user.uid + "/utilities/activeActivity", {active: true})
+    this.length = this.activities.length;
+    if (this.length > this.count) {
+      this.getTimerCount(this.activities[this.count])
+    } else {
+      this.activeActivity = null;
+      clearInterval(this.timerInterval);
+      this.count = 0
+    }
+
+  }
+checkPlanStarted(){
+  firebase.firestore().doc("users/" + this.user.uid + "/utilities/activeActivity").get().then((active)=>{
+    if(active.data()){
+      this.startPlan()
+    } 
+  })
+}
+  getTimerCount(activity) {
+    this.timerInterval = setInterval(() => {
+      let datetime = activity.date + " " + activity.time;
+      let now = new Date().getTime();
+      let countDownDate = new Date(datetime).getTime();
+
+      let distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      let time = hours + ":" + minutes + ":" + seconds;
+     
+      if (distance < 0) {
+        this.activeTime = "Time Past";
+        this.activeActivity = activity.name;
+        clearInterval(this.timerInterval);
+        this.count++;
+        this.startPlan();
+      } else {
+        this.activeTime = time
+        this.activeActivity = activity.name;
+        this.activeStart = activity.time;
+      }
+    }, 1000)
 
 
+  }
   getTotalTime() {
     let time = 0;
     this.activities.forEach((activity) => {
@@ -254,7 +316,8 @@ export class PracticePlanPage implements OnInit {
   }
 
   updateStartTime() {
-    let time = moment(this.startTime, "hh:mm a").format("LT");
+    // let time = moment(this.startTime, "hh:mm a").format("LT");
+    let time = this.startTime;
     firebase.firestore().doc("/users/" + this.user.uid + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).update({ startTime: time });
     this.getActivities();
   }
@@ -279,4 +342,14 @@ export class PracticePlanPage implements OnInit {
   getTimeOfEvent(time, minutes) {
     return moment(time, "hh:mm a").add('minutes', minutes).format('LT')
   }
+
+  // startVibration() {
+  //   this.vibrationInterval = setInterval(() => {
+  //     this.vibration.vibrate(1000)
+  //   }, 2000)
+  // }
+
+  // stopVibration(){
+  //   clearInterval(this.vibrationInterval)
+  // }
 }

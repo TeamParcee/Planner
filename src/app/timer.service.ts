@@ -5,8 +5,8 @@ import { ComponentService } from './component.service';
 import { Event } from './event';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { Shake } from '@ionic-native/shake/ngx';
 import * as firebase from 'firebase';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,6 @@ export class TimerService {
     private componentService: ComponentService,
     private vibration: Vibration,
     private localNotifications: LocalNotifications,
-    private shake: Shake,
 
   ) {
 
@@ -41,27 +40,26 @@ export class TimerService {
   currentTime;
   activeEventLock;
   count;
+  vibrationInterval;
 
 
-  startCountDownTimer(event: Event) {
-    console.log("starting countdown timer");
-    
-    
-      this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
-      this.isTimerRunning();
-      this.timerRunning = true;
-      this.waitForTimerToEnd(event);
+  startCountDownTimer(event) {
+    // console.log("starting countdown timer");
+
+
+    this.timer.start({ countdown: true, startValues: { minutes: event.duration } });
+    // this.isTimerRunning();
+    // this.timerRunning = true;
+    this.waitForTimerToEnd(event);
+
    
-
-
-
 
   }
 
 
 
   waitForTimerToEnd(event) {
-   
+
     this.timer.addEventListener('targetAchieved', () => {
       this.componentService.showOkAlert("Event Ended", event.name + " has ended. ")
     });
@@ -79,7 +77,7 @@ export class TimerService {
   isTimerRunning() {
     this.timer.addEventListener('secondsUpdated', (time) => {
       let currentTime = time.path[0].currentTime;
-      firebase.firestore().doc("utilities/timer").set({...{time: currentTime}});
+      firebase.firestore().doc("utilities/timer").set({ ...{ time: currentTime } });
       if (this.timerRunning == true) {
         return true
       } else {

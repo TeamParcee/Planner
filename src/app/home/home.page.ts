@@ -11,6 +11,8 @@ import { HelperService } from '../helper.service';
 import { ProfilePage } from '../profile/profile.page';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user.service';
+import { Vibration } from '@ionic-native/vibration/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 
 @Component({
@@ -27,27 +29,28 @@ export class HomePage implements OnInit {
     private helper: HelperService,
     private authService: AuthService,
     private userService: UserService,
+    private vibration: Vibration,
+    private localNotifications: LocalNotifications,
   ) { }
 
 
   user;
   nextItem;
-
+  vibrateInterval;
   ngOnInit() {
     this.backgroundMode.enable();
     this.getSchedule();
   }
 
-  async getUser(){
+  async getUser() {
     this.user = await this.userService.getUserDataFromUid(this.authService.user.uid);
-    console.log(this.user, "asadfsadf");
   }
   ionViewWillEnter() {
 
     this.getUser();
     this.activeEventGroup = (this.eventService.activeEventGroup) ? this.eventService.activeEventGroup : this.dummyEventGroup;
-   
-    this.timeService.getTime().subscribe((result)=>{
+
+    this.timeService.getTime().subscribe((result) => {
       this.time = result;
       this.currentEvent = (this.eventService.activeEvent) ? this.eventService.activeEvent : null;
     })
@@ -63,29 +66,44 @@ export class HomePage implements OnInit {
   }
 
 
-  showLogin(){
+  showLogin() {
     this.helper.openModal(LoginComponent, null)
   }
 
-  viewProfile(){
+  viewProfile() {
     console.log(this.user)
   }
 
   getSchedule() {
     firebase.firestore().collection("schedule")
-    .orderBy("datetime")
-    .onSnapshot((snapshot) => {
-      let schedule = [];
-      snapshot.forEach((event) => {
-        let date = new Date(event.data().datetime);
-        let today = new Date();
-        if (date > today) {
-          schedule.push(event.data());
-        }
+      .orderBy("datetime")
+      .onSnapshot((snapshot) => {
+        let schedule = [];
+        snapshot.forEach((event) => {
+          let date = new Date(event.data().datetime);
+          let today = new Date();
+          if (date > today) {
+            schedule.push(event.data());
+          }
 
+        })
+        this.nextItem = schedule.shift();
       })
-      this.nextItem = schedule.shift();
-    })
   }
- 
+
+  vibrate() {
+    this.vibrateInterval = setInterval(() => {
+      this.vibration.vibrate(1000)
+    }, 2000)
+    this.localNotifications.schedule({
+      id: 1,
+      title: "GFPlanner",
+      text: 'Activity Has Completed',
+      sound: 'file://beep.caf',
+    });
+  }
+
+  stopVibrate() {
+    clearInterval(this.vibrateInterval)
+  }
 }

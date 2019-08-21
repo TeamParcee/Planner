@@ -32,6 +32,8 @@ import { PastEventsComponent } from './schedule/past-events/past-events.componen
 import { PipesModule } from './pipes/pipes.module';
 import { ViewScheduleItemComponent } from './schedule/view-schedule-item/view-schedule-item.component';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { AddNewsPage } from './news/add-news/add-news.page';
+import { ViewNewsPage } from './news/view-news/view-news.page';
 
 
 
@@ -59,10 +61,12 @@ firebase.initializeApp(firebaseConfig);
     AddDrillComponent,
     CreateEventGroupComponent,
     AddEventComponent,
+    AddNewsPage,
     EditEventComponent,
     NewScheduleItemComponent,
     ViewTemplatesComponent,
     PastEventsComponent,
+    ViewNewsPage,
     ViewScheduleItemComponent,
 
   ],
@@ -73,6 +77,8 @@ firebase.initializeApp(firebaseConfig);
     AddDrillComponent,
     DaysComponent,
     CreateEventGroupComponent,
+    ViewNewsPage,
+    AddNewsPage,
     AddEventComponent,
     NewScheduleItemComponent,
     EditEventComponent,

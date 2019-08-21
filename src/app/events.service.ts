@@ -89,6 +89,8 @@ export class EventsService {
 
 
 
+  
+
   async startEvent(eventGroup) {
     this.activeEventGroup = eventGroup;
     let events: any[] = eventGroup;
@@ -100,6 +102,7 @@ export class EventsService {
           events.push(event.data())
         })
 
+     
         let x = 0;
         this.timerService.startCountDownTimer(events[0]);
         this.activeEvent = events[0];
