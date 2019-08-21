@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons *ngIf="user">
+    <ion-buttons slot="start" *ngIf="user">
       <ion-back-button [disabled]="!user.fname || !user.lname" slot="start" defaultHref="/tabs/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Profile</ion-title>

@@ -11,13 +11,13 @@ const firebase = require('firebase');
 // });
 
 
-exports.countDown = functions.firestore.document("utilities/timer").onWrite((change, context)=>{
-    setTimeout(()=>{
-        let oldTime = change.after.data().time;
-        let newTime = oldTime - 1;
-        firebase.firestore().doc("utilities/timer").set({time: newTime})
-    }, 1000)
-})
+// exports.countDown = functions.firestore.document("utilities/timer").onWrite((change, context)=>{
+//     setTimeout(()=>{
+//         let oldTime = change.after.data().time;
+//         let newTime = oldTime - 1;
+//         firebase.firestore().doc("utilities/timer").set({time: newTime})
+//     }, 1000)
+// })
 // exports.startTimer = functions.https.onRequest((request, response) => {
 //     response.send("Hello from Firebase!");
 //     console.log(request, response)

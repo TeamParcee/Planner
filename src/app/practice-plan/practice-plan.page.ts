@@ -69,6 +69,8 @@ export class PracticePlanPage implements OnInit {
   activeTime;
   activeActivity;
   activeStart;
+  showStartTime;
+  
   async ionViewWillEnter() {
     await this.getUser();
     
@@ -326,7 +328,7 @@ checkPlanStarted(){
     return new Promise((resolve) => {
       return firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
         if (snapshot.exists) {
-          let startTime = snapshot.data().startTime;
+          let startTime = moment(snapshot.data().startTime, "HH, mm").format("LT");
           this.startTime = (startTime) ? startTime : "Start Time";
           return resolve()
         } else {

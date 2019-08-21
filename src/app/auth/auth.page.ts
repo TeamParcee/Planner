@@ -37,7 +37,7 @@ export class AuthPage implements OnInit {
 
   loginForm: FormGroup;
   registerForm: FormGroup;
-
+  createAccount;
   login() {
     this.authService.loginEmail(this.loginForm.value.email, this.loginForm.value.password).catch((e) => {
       this.helper.okAlert("Problem Occured", e.message)
