@@ -21,8 +21,8 @@ export class ActivitiesService {
   }
 
 
-  public activeWeek = {week: 1};
-  public activeDay = {day: 1};
+  public activeWeek = {week: 0};
+  public activeDay = {day: 0};
   user;
   async getUser(){
     this.user = await this.userService.getUserDataFromUid(this.authService.user.uid)

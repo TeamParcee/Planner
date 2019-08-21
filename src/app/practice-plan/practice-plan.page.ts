@@ -189,7 +189,7 @@ export class PracticePlanPage implements OnInit {
   updateOrder() {
 
     this.orderArray.forEach((item) => {
-      firebase.firestore().doc("/users/" + this.user.uid + "/activities" + item.id).update({ order: item.order })
+      firebase.firestore().doc("/users/" + this.user.uid + "/activities/" + item.id).update({ order: item.order })
     })
   }
 
@@ -228,13 +228,13 @@ export class PracticePlanPage implements OnInit {
     }
 
   }
-checkPlanStarted(){
-  firebase.firestore().doc("users/" + this.user.uid + "/utilities/activeActivity").get().then((active)=>{
-    if(active.data()){
-      this.startPlan()
-    } 
-  })
-}
+// checkPlanStarted(){
+//   firebase.firestore().doc("users/" + this.user.uid + "/utilities/activeActivity").get().then((active)=>{
+//     if(active.data()){
+//       this.startPlan()
+//     } 
+//   })
+// }
   getTimerCount(activity) {
     this.timerInterval = setInterval(() => {
       let datetime = activity.date + " " + activity.time;
@@ -328,8 +328,8 @@ checkPlanStarted(){
     return new Promise((resolve) => {
       return firebase.firestore().doc("/users/" + this.user.coach + "/weeks/" + this.currentWeek.week + "/days/" + this.currentDay.id).get().then((snapshot) => {
         if (snapshot.exists) {
-          let startTime = moment(snapshot.data().startTime, "HH, mm").format("LT");
-          this.startTime = (startTime) ? startTime : "Start Time";
+          let startTime = snapshot.data().startTime;
+         this.startTime = (startTime) ? startTime : "Start Time";
           return resolve()
         } else {
           this.startTime = "Start Time";

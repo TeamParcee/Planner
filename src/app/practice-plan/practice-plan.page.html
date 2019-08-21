@@ -6,12 +6,12 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Practice Plan</ion-title>
-    <ion-buttons slot="end">
-      <ion-button *ngIf="user?.isCoach && !activeActivity" (click)="startPlan()">
+    <ion-buttons *ngIf="!startTime && !activeActivity" slot="end">
+      <ion-button (click)="startPlan()">
         <ion-icon slot="start" name="timer"></ion-icon>
         Show
       </ion-button>
-      <ion-button *ngIf="user?.isCoach && activeActivity" (click)="stopPlan()">
+      <ion-button *ngIf="startTime && activeActivity" (click)="stopPlan()">
         <ion-icon slot="start" name="timer"></ion-icon>
         Hide
       </ion-button>
@@ -38,7 +38,7 @@
 
   <ion-item *ngIf="showStartTime">
     <ion-label position="stacked">Start Time</ion-label>
-    <ion-input type="time" (ionChange)="updateStartTime()"[(ngModel)]="startTime"></ion-input>
+    <ion-datetime minutueValues="00, 15 ,30, 45" pickerFormat="HH:mm" displayFormat="hh:mm A"  (ionChange)="updateStartTime()"[(ngModel)]="startTime"></ion-datetime>
   </ion-item>
   
   <ion-button fill="clear" (click)="viewWeeks($event)">Week {{ currentWeek.week}}</ion-button>
