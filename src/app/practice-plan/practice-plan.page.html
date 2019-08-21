@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Practice Plan</ion-title>
-    <ion-buttons *ngIf="!startTime && !activeActivity" slot="end">
+    <ion-buttons *ngIf="startTime && !activeActivity" slot="end">
       <ion-button (click)="startPlan()">
         <ion-icon slot="start" name="timer"></ion-icon>
         Show
